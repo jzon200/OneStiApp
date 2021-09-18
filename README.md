@@ -1,5 +1,4 @@
-# ONE STI App
-ONE STI Student Portal Clone
+# ONE STI Student Portal Clone
 [Work-in-progress]🚧<br>
 Goal for this Project:<br>
  • Multiple Layouts<br>
