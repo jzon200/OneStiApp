@@ -5,3 +5,4 @@ Goal for this Project:<br>
  • States<br>
  • Navigation<br>
  • Architecture Components (ViewModel & LiveData)
+ • Simple Animations
