@@ -1,8 +1,8 @@
 # ONE STI App
 ONE STI Student Portal Clone
-[Work-in-progress]🚧
-Goal for this Project:
-*Multiple Layouts
-*States
-*Navigation
-*Architecture Components (ViewModel * LiveData)
+[Work-in-progress]🚧<br>
+Goal for this Project:<br>
+•Multiple Layouts<br>
+•States<br>
+•Navigation<br>
+•Architecture Components (ViewModel & LiveData)<br>
