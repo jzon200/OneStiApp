@@ -4,5 +4,5 @@ Goal for this Project:<br>
  • Multiple Layouts<br>
  • States<br>
  • Navigation<br>
- • Architecture Components (ViewModel & LiveData)
+ • Architecture Components (ViewModel & LiveData)<br>
  • Simple Animations
