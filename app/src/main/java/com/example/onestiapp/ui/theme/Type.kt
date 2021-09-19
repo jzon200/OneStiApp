@@ -37,11 +37,11 @@ val Typography = Typography(
     body2 = TextStyle(
         fontFamily = open_sans,
         fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
+        fontSize = 14.sp
     ),
     button = TextStyle(
         fontFamily = open_sans,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 14.sp
     ),
     caption = TextStyle(

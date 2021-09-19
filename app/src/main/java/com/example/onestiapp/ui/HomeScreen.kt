@@ -13,7 +13,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.onestiapp.R
-import com.example.onestiapp.ui.theme.*
+import com.example.onestiapp.data.ClassSchedule
+import com.example.onestiapp.data.getClassSchedule
+import com.example.onestiapp.data.getDate
+import com.example.onestiapp.data.getDay
+import com.example.onestiapp.ui.theme.DividerColor
+import com.example.onestiapp.ui.theme.OneStiAppTheme
+import com.example.onestiapp.ui.theme.PrimaryColor
+import com.example.onestiapp.ui.theme.courseSubjectColor
 
 @Composable
 fun HomeScreen() {
@@ -125,52 +132,75 @@ fun ClassScheduleCard() {
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Classes for Today|Thursday", style = MaterialTheme.typography.subtitle1)
+            Text(text = "Classes for Today|${getDay()}", style = MaterialTheme.typography.subtitle1)
             Spacer(Modifier.size(4.dp))
-            Text(text = "AS OF 10 AUG, 2021", style = MaterialTheme.typography.overline)
+            Text(text = "AS OF ${getDate()}", style = MaterialTheme.typography.overline)
             Spacer(modifier = Modifier.size(6.dp))
             Divider(color = DividerColor, thickness = 2.dp)
             Spacer(modifier = Modifier.size(14.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .background(courseSubjectColor[0])
-                        .height(64.dp)
-                        .width(96.dp)
-                ) {
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "07:30 AM",
-                            style = MaterialTheme.typography.subtitle2,
-                            color = Color.White
-                        )
-                        Text(
-                            text = "to 09:30 AM",
-                            style = MaterialTheme.typography.body2,
-                            color = Color.White
-                        )
-                    }
-                }
-                Spacer(Modifier.size(12.dp))
-                Column {
-                    Text(
-                        text = "Programming Languages",
-                        style = MaterialTheme.typography.subtitle2
-                    )
-                    Spacer(Modifier.size(4.dp))
-                    Text(
-                        text = "310|TBA",
-                        style = MaterialTheme.typography.caption
+            // If there's no class schedule, do this
+            if (getClassSchedule().isEmpty()) {
+                Text(
+                    text = "Your schedule is free today.",
+                    style = MaterialTheme.typography.caption
+                )
+            } else {
+                // Iterates the @Composable ClassScheduleItem
+                // depending on the list of schedules in the current day
+                getClassSchedule().forEachIndexed { index, classSchedule ->
+                    ClassScheduleItem(
+                        schedule = classSchedule,
+                        color = courseSubjectColor[index]
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun ClassScheduleItem(
+    schedule: ClassSchedule,
+    color: Color
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .background(color)
+                .height(64.dp)
+                .width(96.dp)
+        ) {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = schedule.classStart,
+                    style = MaterialTheme.typography.subtitle2,
+                    color = Color.White
+                )
+                Text(
+                    text = "to ${schedule.classEnd}",
+                    style = MaterialTheme.typography.caption,
+                    color = Color.White
+                )
+            }
+        }
+        Spacer(Modifier.size(12.dp))
+        Column {
+            Text(
+                text = schedule.courseSubject,
+                style = MaterialTheme.typography.subtitle2
+            )
+            Spacer(Modifier.size(4.dp))
+            Text(
+                text = "${schedule.classRoom}|${schedule.classProfessor}",
+                style = MaterialTheme.typography.caption
+            )
         }
     }
 }
