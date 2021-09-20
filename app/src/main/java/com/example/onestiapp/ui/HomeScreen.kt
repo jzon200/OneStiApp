@@ -3,6 +3,8 @@ package com.example.onestiapp.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -62,14 +64,20 @@ fun HomeScreen() {
         },
     ) {
         Surface(modifier = Modifier.fillMaxSize()) {
+            val scrollState = rememberScrollState()
             Column(
                 Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
                     .padding(10.dp)
             ) {
                 LatestNewsCard()
                 Spacer(Modifier.size(12.dp))
                 ClassScheduleCard()
+                Spacer(Modifier.size(12.dp))
+                PaymentScheduleCard()
+                Spacer(Modifier.size(12.dp))
+                LatestGradeCard()
             }
         }
     }
@@ -98,28 +106,26 @@ fun LatestNewsCard() {
                     color = PrimaryColor
                 )
             }
-            Column(Modifier.fillMaxWidth()) {
-                Spacer(modifier = Modifier.size(4.dp))
-                Divider(color = DividerColor, thickness = 2.dp)
-                Spacer(modifier = Modifier.size(12.dp))
-                Text(
-                    text = "Equipping STI Learners with SAP Business One Skills",
-                    style = MaterialTheme.typography.subtitle2
+            Spacer(modifier = Modifier.size(4.dp))
+            CustomDivider()
+            Spacer(modifier = Modifier.size(12.dp))
+            Text(
+                text = "Equipping STI Learners with SAP Business One Skills",
+                style = MaterialTheme.typography.subtitle2
+            )
+            Spacer(modifier = Modifier.size(12.dp))
+            Row(Modifier.fillMaxWidth()) {
+                Image(
+                    painterResource(id = R.drawable.latest_news),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.fillMaxWidth(0.66f)
                 )
                 Spacer(modifier = Modifier.size(12.dp))
-                Row(Modifier.fillMaxWidth()) {
-                    Image(
-                        painterResource(id = R.drawable.latest_news),
-                        contentDescription = null,
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.fillMaxWidth(0.66f)
-                    )
-                    Spacer(modifier = Modifier.size(12.dp))
-                    Text(
-                        text = "Find out how STI turns students into job-ready individuals through SAP Business One Cloud System.",
-                        style = MaterialTheme.typography.overline
-                    )
-                }
+                Text(
+                    text = "Find out how STI turns students into job-ready individuals through SAP Business One Cloud System.",
+                    style = MaterialTheme.typography.overline
+                )
             }
         }
     }
@@ -132,11 +138,17 @@ fun ClassScheduleCard() {
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Classes for Today|${getDay()}", style = MaterialTheme.typography.subtitle1)
+            Text(
+                text = "Classes for Today|${getDay()}",
+                style = MaterialTheme.typography.subtitle1
+            )
             Spacer(Modifier.size(4.dp))
-            Text(text = "AS OF ${getDate()}", style = MaterialTheme.typography.overline)
+            Text(
+                text = "AS OF ${getDate()}",
+                style = MaterialTheme.typography.overline
+            )
             Spacer(modifier = Modifier.size(6.dp))
-            Divider(color = DividerColor, thickness = 2.dp)
+            CustomDivider()
             Spacer(modifier = Modifier.size(14.dp))
             // If there's no class schedule, do this
             if (getClassSchedule().isEmpty()) {
@@ -191,7 +203,7 @@ private fun ClassScheduleItem(
             }
         }
         Spacer(Modifier.size(12.dp))
-        Column {
+        Column(Modifier.fillMaxWidth()) {
             Text(
                 text = schedule.courseSubject,
                 style = MaterialTheme.typography.subtitle2
@@ -203,6 +215,112 @@ private fun ClassScheduleItem(
             )
         }
     }
+}
+
+@Composable
+fun PaymentScheduleCard() {
+    Card(elevation = 4.dp) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Payment Schedule",
+                    style = MaterialTheme.typography.subtitle1
+                )
+                Text(
+                    text = "VIEW ALL",
+                    style = MaterialTheme.typography.overline,
+                    color = PrimaryColor
+                )
+            }
+            Spacer(modifier = Modifier.size(4.dp))
+            Text(text = "AS OF ${getDate()}", style = MaterialTheme.typography.overline)
+            Spacer(modifier = Modifier.size(6.dp))
+            CustomDivider()
+            Spacer(modifier = Modifier.size(12.dp))
+            Row(Modifier.fillMaxWidth()) {
+                Column {
+                    Text(
+                        text = "Next Payment Amount",
+                        style = MaterialTheme.typography.body1
+                    )
+                    Text(
+                        text = "PhP 1,364.80",
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                }
+                Spacer(modifier = Modifier.size(48.dp))
+                Column {
+                    Text(
+                        text = "Due Date",
+                        style = MaterialTheme.typography.body2
+                    )
+                    Text(
+                        text = "08 Oct, 2021",
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun LatestGradeCard() {
+    Card(elevation = 4.dp) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Latest Grade",
+                    style = MaterialTheme.typography.subtitle1
+                )
+                Text(
+                    text = "VIEW ALL",
+                    style = MaterialTheme.typography.overline,
+                    color = PrimaryColor
+                )
+            }
+            Spacer(modifier = Modifier.size(4.dp))
+            CustomDivider()
+            Spacer(modifier = Modifier.size(12.dp))
+            Text(
+                text = "JEFFERSON PRADO",
+                style = MaterialTheme.typography.caption
+            )
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Data Structures & Algorithms",
+                    style = MaterialTheme.typography.body2
+                )
+                Text(
+                    text = "100.00",
+                    style = MaterialTheme.typography.body2,
+                    color = PrimaryColor
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CustomDivider() {
+    Divider(color = DividerColor, thickness = 1.5.dp)
 }
 
 @Preview
