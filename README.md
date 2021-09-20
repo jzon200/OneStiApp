@@ -4,5 +4,6 @@ Goal for this Project:<br>
  • Multiple Layouts<br>
  • States<br>
  • Navigation<br>
- • Architecture Components (ViewModel & LiveData)<br>
- • Simple Animations
+ • Architecture Components (Fragments, ViewModel & LiveData)<br>
+ • Simple Animations<br>
+ • Room Database (maybe)
