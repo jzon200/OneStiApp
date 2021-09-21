@@ -42,7 +42,7 @@ val Typography = Typography(
     button = TextStyle(
         fontFamily = open_sans,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 14.sp
+        fontSize = 12.sp
     ),
     caption = TextStyle(
         fontFamily = open_sans,
