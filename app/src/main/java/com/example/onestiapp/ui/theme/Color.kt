@@ -17,4 +17,5 @@ val courseSubjectColor = listOf(
 )
 
 // Drawer Icon color
-val DrawerIconColor = Color(0xFF656565)
+val DrawerContentIconColor = Color(0xFF656565)
+val DrawerHighlightRowColor = Color(0xFFE4E4E4)
