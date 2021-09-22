@@ -9,7 +9,7 @@ import com.example.onestiapp.getTitle
 import com.example.onestiapp.ui.components.CustomTopBar
 
 @Composable
-fun StudentBalanceScreen(openDrawer: () -> Unit) {
+fun MyGradesScreen(openDrawer: () -> Unit) {
     Surface(modifier = Modifier.fillMaxSize()) {
 
     }

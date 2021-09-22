@@ -6,96 +6,43 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.onestiapp.DrawerScreens
 import com.example.onestiapp.R
 import com.example.onestiapp.data.ClassSchedule
 import com.example.onestiapp.data.getClassSchedule
 import com.example.onestiapp.data.getDate
 import com.example.onestiapp.data.getDay
-import com.example.onestiapp.getTitle
 import com.example.onestiapp.ui.theme.DividerColor
-import com.example.onestiapp.ui.theme.OneStiAppTheme
 import com.example.onestiapp.ui.theme.PrimaryColor
 import com.example.onestiapp.ui.theme.courseSubjectColor
 
 @Composable
 fun HomeScreen(openDrawer: () -> Unit) {
-    Scaffold(
-        topBar = {
-            HomeTopBar(title = getTitle(DrawerScreens.Home), onButtonClicked = { openDrawer() })
-        },
-    ) {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            val scrollState = rememberScrollState()
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(10.dp)
-            ) {
-                LatestNewsCard()
-                Spacer(Modifier.size(12.dp))
-                ClassScheduleCard()
-                Spacer(Modifier.size(12.dp))
-                PaymentScheduleCard()
-                Spacer(Modifier.size(12.dp))
-                LatestGradeCard()
-            }
+    Surface(modifier = Modifier.fillMaxSize()) {
+        val scrollState = rememberScrollState()
+        Column(
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .padding(10.dp)
+        ) {
+            LatestNewsCard()
+            Spacer(Modifier.size(12.dp))
+            ClassScheduleCard()
+            Spacer(Modifier.size(12.dp))
+            PaymentScheduleCard()
+            Spacer(Modifier.size(12.dp))
+            LatestGradeCard()
         }
     }
 }
 
-@Composable
-private fun HomeTopBar(
-    title: String,
-    drawerIcon: ImageVector = Icons.Filled.Menu,
-    onButtonClicked: () -> Unit,
-) {
-    TopAppBar(
-        title = {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.subtitle1,
-                color = Color.White
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = { onButtonClicked() }) {
-                Icon(
-                    imageVector = drawerIcon,
-                    contentDescription = "Nav drawer"
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_manage_widgets),
-                    contentDescription = "Manage widgets",
-                    tint = Color.White
-                )
-            }
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_baseline_notifications_24),
-                    contentDescription = "Notifications",
-                    tint = Color.White
-                )
-            }
-        },
-    )
-}
 
 @Composable
 fun LatestNewsCard() {
@@ -337,32 +284,32 @@ fun CustomDivider() {
     Divider(color = DividerColor, thickness = 1.5.dp)
 }
 
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    OneStiAppTheme {
-        Scaffold(
-            topBar = {
-                HomeTopBar(title = getTitle(DrawerScreens.Home), onButtonClicked = { })
-            },
-        ) {
-            Surface(modifier = Modifier.fillMaxSize()) {
-                val scrollState = rememberScrollState()
-                Column(
-                    Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState)
-                        .padding(10.dp)
-                ) {
-                    LatestNewsCard()
-                    Spacer(Modifier.size(12.dp))
-                    ClassScheduleCard()
-                    Spacer(Modifier.size(12.dp))
-                    PaymentScheduleCard()
-                    Spacer(Modifier.size(12.dp))
-                    LatestGradeCard()
-                }
-            }
-        }
-    }
-}
+//@Preview
+//@Composable
+//fun HomeScreenPreview() {
+//    OneStiAppTheme {
+//        Scaffold(
+//                topBar = {
+//                    HomeTopBar(title = getTitle(DrawerScreens.Home), onButtonClicked = { })
+//                },
+//        ) {
+//            Surface(modifier = Modifier.fillMaxSize()) {
+//                val scrollState = rememberScrollState()
+//                Column(
+//                        Modifier
+//                                .fillMaxSize()
+//                                .verticalScroll(scrollState)
+//                                .padding(10.dp)
+//                ) {
+//                    LatestNewsCard()
+//                    Spacer(Modifier.size(12.dp))
+//                    ClassScheduleCard()
+//                    Spacer(Modifier.size(12.dp))
+//                    PaymentScheduleCard()
+//                    Spacer(Modifier.size(12.dp))
+//                    LatestGradeCard()
+//                }
+//            }
+//        }
+//    }
+//}

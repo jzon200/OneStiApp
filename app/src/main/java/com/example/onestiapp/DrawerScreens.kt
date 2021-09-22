@@ -12,9 +12,21 @@ enum class DrawerScreens(title: String, val icon: ImageVector) {
     Grades(title = "Grades", icon = Icons.Filled.Grade),
     ClassSchedule(title = "Class Schedule", icon = Icons.Filled.Schedule),
     ProgramCurriculum(title = "Program Curriculum", icon = Icons.Filled.School),
-    StudentBalance(title = "Student Balance", icon = Icons.Filled.AttachMoney)
-}
+    StudentBalance(title = "Student Balance", icon = Icons.Filled.AttachMoney);
 
+    companion object {
+        fun fromRoute(route: String?): DrawerScreens =
+            when (route?.substringBefore("/")) {
+                Home.name -> Home
+                Grades.name -> Grades
+                ClassSchedule.name -> ClassSchedule
+                ProgramCurriculum.name -> ProgramCurriculum
+                StudentBalance.name -> StudentBalance
+                null -> Home
+                else -> throw IllegalArgumentException("Route $route is not recognized.")
+            }
+    }
+}
 
 
 fun getTitle(screen: DrawerScreens): String {

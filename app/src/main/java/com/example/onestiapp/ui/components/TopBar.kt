@@ -13,6 +13,7 @@ import com.example.onestiapp.R
 
 @Composable
 fun CustomTopBar(
+    currentScreen: DrawerScreens,
     title: String,
     drawerIcon: ImageVector = Icons.Filled.Menu,
     onButtonClicked: () -> Unit,
@@ -34,7 +35,7 @@ fun CustomTopBar(
             }
         },
         actions = {
-            ActionsIconItem(drawerScreens = DrawerScreens.Home)
+            ActionsIconItem(drawerScreens = currentScreen)
         },
     )
 }
