@@ -23,7 +23,7 @@ import com.example.onestiapp.ui.theme.PrimaryColor
 import com.example.onestiapp.ui.theme.courseSubjectColor
 
 @Composable
-fun HomeScreen(openDrawer: () -> Unit) {
+fun HomeScreen() {
     Surface(modifier = Modifier.fillMaxSize()) {
         val scrollState = rememberScrollState()
         Column(

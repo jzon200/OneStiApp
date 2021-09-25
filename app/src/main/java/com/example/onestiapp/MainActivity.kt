@@ -3,21 +3,25 @@ package com.example.onestiapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.onestiapp.ui.*
-import com.example.onestiapp.ui.components.CustomTopBar
 import com.example.onestiapp.ui.components.NavDrawer
+import com.example.onestiapp.ui.components.OneStiTopBar
 import com.example.onestiapp.ui.theme.OneStiAppTheme
+import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
 
+@ExperimentalPagerApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,33 +33,33 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalPagerApi
 @Composable
 fun OneStiApp() {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     val backstackEntry = navController.currentBackStackEntryAsState()
-    val currentScreen = DrawerScreens.fromRoute(backstackEntry.value?.destination?.route)
-    val openDrawer = {
-        scope.launch {
-            scaffoldState.drawerState.open()
-        }
-    }
+    val currentScreen = Screens.fromRoute(backstackEntry.value?.destination?.route)
+
     Scaffold(
         topBar = {
-            CustomTopBar(
+            OneStiTopBar(
                 currentScreen = currentScreen,
-                title = if (currentScreen == DrawerScreens.Grades || currentScreen == DrawerScreens.ClassSchedule) "My ${
-                    getTitle(currentScreen)
-                }" else getTitle(currentScreen)
-            ) {
-                openDrawer()
-            }
+                onButtonClicked = {
+                    // Opens NavDrawer
+                    scope.launch {
+                        scaffoldState.drawerState.open()
+//                        pagerState.animateScrollToPage(informationTabs.indexOf(currentScreen))
+                    }
+                }
+            )
         },
         scaffoldState = scaffoldState,
         drawerContent = {
             NavDrawer(
                 onDestinationClicked = { route ->
+                    // Close NavDrawer
                     scope.launch {
                         scaffoldState.drawerState.close()
                     }
@@ -67,53 +71,33 @@ fun OneStiApp() {
             )
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
-    ) {
-        OneStiNavHost(navController = navController) {
-            openDrawer()
-        }
+    ) { innerPadding ->
+        OneStiNavHost(modifier = Modifier.padding(innerPadding), navController = navController)
     }
 }
 
+@ExperimentalPagerApi
 @Composable
-fun OneStiNavHost(navController: NavHostController, openDrawer: () -> Unit) {
+fun OneStiNavHost(modifier: Modifier = Modifier, navController: NavHostController) {
     NavHost(
+        modifier = modifier,
         navController = navController,
-        startDestination = DrawerScreens.Home.name
+        startDestination = Screens.Home.route
     ) {
-        composable(route = DrawerScreens.Home.name) {
-            HomeScreen(
-                openDrawer = {
-                    openDrawer()
-                }
-            )
+        composable(route = Screens.Home.route) {
+            HomeScreen()
         }
-        composable(route = DrawerScreens.Grades.name) {
-            MyGradesScreen(
-                openDrawer = {
-                    openDrawer()
-                }
-            )
+        composable(route = Screens.Grades.route) {
+            MyGradesScreen()
         }
-        composable(route = DrawerScreens.ClassSchedule.name) {
-            ClassScheduleScreen(
-                openDrawer = {
-                    openDrawer()
-                }
-            )
+        composable(route = Screens.ClassSchedule.route) {
+            ClassScheduleScreen()
         }
-        composable(route = DrawerScreens.ProgramCurriculum.name) {
-            ProgramCurriculumScreen(
-                openDrawer = {
-                    openDrawer()
-                }
-            )
+        composable(route = Screens.ProgramCurriculum.route) {
+            ProgramCurriculumScreen()
         }
-        composable(route = DrawerScreens.StudentBalance.name) {
-            StudentBalanceScreen(
-                openDrawer = {
-                    openDrawer()
-                }
-            )
+        composable(route = Screens.StudentBalance.route) {
+            StudentBalanceScreen()
         }
     }
 }

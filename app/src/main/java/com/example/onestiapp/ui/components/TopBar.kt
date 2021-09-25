@@ -8,20 +8,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import com.example.onestiapp.DrawerScreens
 import com.example.onestiapp.R
+import com.example.onestiapp.Screens
 
 @Composable
-fun CustomTopBar(
-    currentScreen: DrawerScreens,
-    title: String,
+fun OneStiTopBar(
+    currentScreen: Screens = Screens.Home,
     drawerIcon: ImageVector = Icons.Filled.Menu,
     onButtonClicked: () -> Unit,
 ) {
     TopAppBar(
         title = {
             Text(
-                text = title,
+                text = currentScreen.title,
                 style = MaterialTheme.typography.subtitle1,
                 color = Color.White
             )
@@ -35,7 +34,7 @@ fun CustomTopBar(
             }
         },
         actions = {
-            ActionsIconItem(drawerScreens = currentScreen)
+            ActionsIconItem(currentScreen = currentScreen)
         },
     )
 }
@@ -46,8 +45,8 @@ fun CustomTopBar(
  * in Information Screens (Grades, ClassSchedule, etc.) = 1
  */
 @Composable
-private fun ActionsIconItem(drawerScreens: DrawerScreens) {
-    if (drawerScreens == DrawerScreens.Home){
+private fun ActionsIconItem(currentScreen: Screens) {
+    if (currentScreen == Screens.Home) {
         IconButton(onClick = { /*TODO*/ }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_manage_widgets),

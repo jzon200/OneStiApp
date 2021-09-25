@@ -1,8 +1,6 @@
 package com.example.onestiapp.ui.components
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -15,20 +13,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.onestiapp.DrawerScreens
+import com.example.onestiapp.*
 import com.example.onestiapp.R
-import com.example.onestiapp.getTitle
 import com.example.onestiapp.ui.CustomDivider
 import com.example.onestiapp.ui.theme.DrawerContentIconColor
 import com.example.onestiapp.ui.theme.DrawerHighlightRowColor
 import com.example.onestiapp.ui.theme.OneStiAppTheme
 import com.example.onestiapp.ui.theme.PrimaryColor
 
-//// Convert the enum class as a list
-//private val drawerScreens = DrawerScreens.values().toList()
 
 @Composable
-fun DrawerProfile() {
+fun OneStiDrawerProfile() {
     Column(
         Modifier
             .fillMaxWidth()
@@ -74,9 +69,9 @@ fun DrawerProfile() {
 }
 
 @Composable
-fun NavDrawer(
+fun OneStiNavDrawer(
     modifier: Modifier = Modifier,
-    rowItems: List<DrawerScreens> = DrawerScreens.values().toList(),
+    rowItems: List<Screens.DrawerScreens> = drawerScreens,
     activeHighlightColor: Color = DrawerHighlightRowColor,
     initialItemSelectedIndex: Int = 0,
     onDestinationClicked: (route: String) -> Unit,
@@ -84,47 +79,68 @@ fun NavDrawer(
     var selectedItemIndex by remember {
         mutableStateOf(initialItemSelectedIndex)
     }
+    val scrollState = rememberScrollState()
     Column(modifier.fillMaxSize()) {
-        DrawerProfile()
-        NavDrawerRowItem(
-            item = rowItems.first(),
-            isSelected = rowItems.indexOf(rowItems.first()) == selectedItemIndex,
-            activeHighlightColor = activeHighlightColor,
-            onItemClicked = {
-                onDestinationClicked(rowItems.first().name)
+        OneStiDrawerProfile()
+        Column(
+            modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+        ) {
+// Returns the Home Drawer Row
+            NavDrawerRowItem(
+                item = rowItems.first(),
+                isSelected = rowItems.indexOf(rowItems.first()) == selectedItemIndex,
+                activeHighlightColor = activeHighlightColor
+            ) {
+                onDestinationClicked(rowItems.first().route)
                 selectedItemIndex = rowItems.indexOf(rowItems.first())
             }
-        )
-        Divider()
-        // Information Section
-        Text(
-            text = "Information",
-            style = MaterialTheme.typography.subtitle2,
-            color = PrimaryColor,
-            modifier = Modifier.padding(12.dp)
-        )
-        // return Information Drawer Row Items excluding the Home
-        rowItems.forEachIndexed { index, drawerScreens ->
-            if (drawerScreens != DrawerScreens.Home){
+            Divider()
+            // Information Section
+            Text(
+                text = "Information",
+                style = MaterialTheme.typography.subtitle2,
+                color = PrimaryColor,
+                modifier = Modifier.padding(12.dp)
+            )
+            // Iterate Information Drawer Rows
+            for (index in 1 until 5) {
                 NavDrawerRowItem(
-                    item = drawerScreens,
+                    item = rowItems[index],
                     isSelected = index == selectedItemIndex,
-                    activeHighlightColor = activeHighlightColor,
-                    onItemClicked = {
-                        onDestinationClicked(drawerScreens.name)
-                        selectedItemIndex = index
-                    }
-                )
+                    activeHighlightColor = activeHighlightColor
+                ) {
+                    onDestinationClicked(rowItems[index].route)
+                    selectedItemIndex = index
+                }
+            }
+            Divider()
+            // Iterate Others Drawer Rows
+            Text(
+                text = "Others",
+                style = MaterialTheme.typography.subtitle2,
+                color = PrimaryColor,
+                modifier = Modifier.padding(12.dp)
+            )
+            for (index in 5 until rowItems.size) {
+                NavDrawerRowItem(
+                    item = rowItems[index],
+                    isSelected = index == selectedItemIndex,
+                    activeHighlightColor = activeHighlightColor
+                ) {
+                    onDestinationClicked(rowItems[index].route)
+                    selectedItemIndex = index
+                }
             }
         }
-        Divider()
     }
 }
 
 @Composable
 private fun NavDrawerRowItem(
     modifier: Modifier = Modifier,
-    item: DrawerScreens,
+    item: Screens.DrawerScreens,
     isSelected: Boolean = false,
     activeHighlightColor: Color = DrawerHighlightRowColor,
     onItemClicked: (route: String) -> Unit,
@@ -134,23 +150,19 @@ private fun NavDrawerRowItem(
             .fillMaxWidth()
             .size(48.dp)
             .background(if (isSelected) activeHighlightColor else Color.Transparent)
-            .clickable { onItemClicked(item.name) },
+            .clickable { onItemClicked(item.route) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(modifier = modifier.size(12.dp))
         Icon(
             imageVector = item.icon,
-            contentDescription = null,
+            contentDescription = item.icon.name,
             tint = DrawerContentIconColor,
             modifier = Modifier.size(18.dp)
         )
         Spacer(modifier = modifier.size(16.dp))
         Text(
-            text = if (item == DrawerScreens.Grades || item == DrawerScreens.ClassSchedule) "View ${
-                getTitle(
-                    item
-                )
-            }" else getTitle(item),
+            text = item.title,
             style = MaterialTheme.typography.subtitle2,
         )
     }
@@ -161,7 +173,7 @@ private fun NavDrawerRowItem(
 fun DrawerProfilePreview() {
     OneStiAppTheme {
         Surface {
-            DrawerProfile()
+            OneStiDrawerProfile()
         }
     }
 }
@@ -171,7 +183,7 @@ fun DrawerProfilePreview() {
 fun DrawerPreview() {
     OneStiAppTheme {
         Surface {
-            NavDrawer() { "" }
+            OneStiNavDrawer() { "" }
         }
     }
 }
