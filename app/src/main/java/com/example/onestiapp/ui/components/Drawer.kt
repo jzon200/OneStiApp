@@ -87,7 +87,7 @@ fun OneStiNavDrawer(
                 .fillMaxSize()
                 .verticalScroll(scrollState)
         ) {
-// Returns the Home Drawer Row
+            // Returns the Home Drawer Row
             NavDrawerRowItem(
                 item = rowItems.first(),
                 isSelected = rowItems.indexOf(rowItems.first()) == selectedItemIndex,

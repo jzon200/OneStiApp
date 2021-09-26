@@ -25,11 +25,10 @@ import com.example.onestiapp.ui.theme.courseSubjectColor
 @Composable
 fun HomeScreen() {
     Surface(modifier = Modifier.fillMaxSize()) {
-        val scrollState = rememberScrollState()
         Column(
             Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
+                .verticalScroll(rememberScrollState())
                 .padding(10.dp)
         ) {
             LatestNewsCard()

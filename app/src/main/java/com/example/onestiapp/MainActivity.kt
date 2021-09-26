@@ -15,7 +15,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.onestiapp.ui.*
-import com.example.onestiapp.ui.components.NavDrawer
+import com.example.onestiapp.ui.components.OneStiNavDrawer
+import com.example.onestiapp.ui.components.OneStiTabLayout
+import com.example.onestiapp.ui.components.OneStiTabRow
 import com.example.onestiapp.ui.components.OneStiTopBar
 import com.example.onestiapp.ui.theme.OneStiAppTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -50,18 +52,18 @@ fun OneStiApp() {
                     // Opens NavDrawer
                     scope.launch {
                         scaffoldState.drawerState.open()
-//                        pagerState.animateScrollToPage(informationTabs.indexOf(currentScreen))
                     }
                 }
             )
         },
         scaffoldState = scaffoldState,
         drawerContent = {
-            NavDrawer(
+            OneStiNavDrawer(
                 onDestinationClicked = { route ->
                     // Close NavDrawer
                     scope.launch {
                         scaffoldState.drawerState.close()
+//                        pagerState.animateScrollToPage(informationTabs.indexOf(currentScreen))
                     }
                     navController.navigate(route) {
                         popUpTo = navController.graph.startDestinationId
@@ -88,15 +90,19 @@ fun OneStiNavHost(modifier: Modifier = Modifier, navController: NavHostControlle
             HomeScreen()
         }
         composable(route = Screens.Grades.route) {
+            OneStiTabRow(currentScreen = Screens.Grades)
             MyGradesScreen()
         }
         composable(route = Screens.ClassSchedule.route) {
+            OneStiTabRow(currentScreen = Screens.ClassSchedule)
             ClassScheduleScreen()
         }
         composable(route = Screens.ProgramCurriculum.route) {
+            OneStiTabRow(currentScreen = Screens.ProgramCurriculum)
             ProgramCurriculumScreen()
         }
         composable(route = Screens.StudentBalance.route) {
+            OneStiTabRow(currentScreen = Screens.StudentBalance)
             StudentBalanceScreen()
         }
     }

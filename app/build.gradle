@@ -66,4 +66,10 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:2.4.0-alpha09"
     //Icons compose extended
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    //Paging
+    implementation "androidx.paging:paging-compose:1.0.0-alpha12"
+
+    //Pager
+    implementation "com.google.accompanist:accompanist-pager:0.13.0"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.13.0"
 }
