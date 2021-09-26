@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun StudentBalanceScreen() {
@@ -16,6 +17,6 @@ fun StudentBalanceScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Student Balance")
+        Text(text = "Student Balance", fontSize = 36.sp)
     }
 }

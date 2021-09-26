@@ -1,5 +1,6 @@
 package com.example.onestiapp.ui.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -8,35 +9,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
 import com.example.onestiapp.R
 import com.example.onestiapp.Screens
+import com.google.accompanist.pager.ExperimentalPagerApi
 
 @Composable
 fun OneStiTopBar(
-    currentScreen: Screens = Screens.Home,
+    currentScreen: Screens,
+    navController: NavController,
     drawerIcon: ImageVector = Icons.Filled.Menu,
     onButtonClicked: () -> Unit,
 ) {
-    TopAppBar(
-        title = {
-            Text(
-                text = currentScreen.title,
-                style = MaterialTheme.typography.subtitle1,
-                color = Color.White
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = { onButtonClicked() }) {
-                Icon(
-                    imageVector = drawerIcon,
-                    contentDescription = "Nav drawer"
+    Column {
+        TopAppBar(
+            title = {
+                Text(
+                    text = currentScreen.title,
+                    style = MaterialTheme.typography.subtitle1,
+                    color = Color.White
                 )
-            }
-        },
-        actions = {
-            ActionsIconItem(currentScreen = currentScreen)
-        },
-    )
+            },
+            navigationIcon = {
+                IconButton(onClick = { onButtonClicked() }) {
+                    Icon(
+                        imageVector = drawerIcon,
+                        contentDescription = "Nav drawer"
+                    )
+                }
+            },
+            actions = {
+                ActionsIconItem(currentScreen = currentScreen)
+            },
+        )
+        if (currentScreen == Screens.Grades || currentScreen == Screens.ClassSchedule || currentScreen == Screens.ProgramCurriculum || currentScreen == Screens.StudentBalance) {
+            OneStiTabRow(currentScreen = currentScreen, navController = navController)
+        }
+    }
 }
 
 /**

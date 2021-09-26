@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun ClassScheduleScreen() {
@@ -15,6 +16,6 @@ fun ClassScheduleScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Class Schedule")
+        Text(text = "Class Schedule", fontSize = 36.sp)
     }
 }

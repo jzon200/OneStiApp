@@ -1,5 +1,7 @@
 package com.example.onestiapp.ui.components
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Icon
@@ -12,6 +14,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.onestiapp.Screens
 import com.example.onestiapp.informationScreens
 import com.example.onestiapp.ui.ClassScheduleScreen
@@ -27,7 +31,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun OneStiTabRow(
     currentScreen: Screens,
-    modifier: Modifier = Modifier
+    navController: NavController
 ) {
     val selectedTabIndex = when (currentScreen) {
         Screens.Grades -> 0
@@ -56,9 +60,16 @@ fun OneStiTabRow(
                             contentDescription = tab.icon.name
                         )
                     },
+                    enabled = state != index,
                     selected = state == index,
                     unselectedContentColor = Color.White,
-                    onClick = { state = index }
+                    onClick = {
+                        state = index
+                        navController.navigate(tab.route) {
+                            launchSingleTop = true
+                        }
+                        Log.d(ContentValues.TAG, "OneStiAppTabRow: $currentScreen")
+                    }
                 )
             }
         }
@@ -67,19 +78,15 @@ fun OneStiTabRow(
 
 /**
  * This composable [ExperimentalPagerApi] may vary in the future.
+ * I would not use it for now :((
  */
 @ExperimentalPagerApi
 @Composable
-fun OneStiTabLayout() {
+fun OneStiTabLayout(
+    currentScreen: Screens,
+) {
     val pagerState = rememberPagerState(informationScreens.size)
     val scope = rememberCoroutineScope()
-//    val currentPageIndex = when (screen) {
-//        DrawerScreens.Grades -> 0
-//        DrawerScreens.ClassSchedule -> 1
-//        DrawerScreens.ProgramCurriculum -> 2
-//        DrawerScreens.StudentBalance -> 3
-//        else -> pagerState.currentPage
-//    }
 
     Column {
         TabRow(
@@ -134,6 +141,6 @@ private fun OneStiHorizontalPager(pagerState: PagerState) {
 @Composable
 fun TabRowPreview() {
     OneStiAppTheme {
-        OneStiTabRow(Screens.ProgramCurriculum)
+        OneStiTabRow(Screens.ProgramCurriculum, rememberNavController())
     }
 }

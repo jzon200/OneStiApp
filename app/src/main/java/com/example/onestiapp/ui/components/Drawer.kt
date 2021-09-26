@@ -129,7 +129,6 @@ fun OneStiNavDrawer(
                     isSelected = index == selectedItemIndex,
                     activeHighlightColor = activeHighlightColor
                 ) {
-                    onDestinationClicked(rowItems[index].route)
                     selectedItemIndex = index
                 }
             }
@@ -143,14 +142,14 @@ private fun NavDrawerRowItem(
     item: Screens.DrawerScreens,
     isSelected: Boolean = false,
     activeHighlightColor: Color = DrawerHighlightRowColor,
-    onItemClicked: (route: String) -> Unit,
+    onItemClicked: () -> Unit,
 ) {
     Row(
         modifier
             .fillMaxWidth()
             .size(48.dp)
             .background(if (isSelected) activeHighlightColor else Color.Transparent)
-            .clickable { onItemClicked(item.route) },
+            .clickable(enabled = !isSelected) { onItemClicked() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(modifier = modifier.size(12.dp))
