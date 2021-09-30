@@ -12,33 +12,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.onestiapp.R
+import com.example.onestiapp.Screens
 import com.example.onestiapp.data.ClassSchedule
 import com.example.onestiapp.data.getClassSchedule
 import com.example.onestiapp.data.getDate
 import com.example.onestiapp.data.getDay
-import com.example.onestiapp.ui.theme.DividerColor
-import com.example.onestiapp.ui.theme.PrimaryColor
-import com.example.onestiapp.ui.theme.courseSubjectColor
+import com.example.onestiapp.ui.theme.*
 
 @Composable
 fun HomeScreen() {
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(10.dp)
-        ) {
-            LatestNewsCard()
-            Spacer(Modifier.size(12.dp))
-            ClassScheduleCard()
-            Spacer(Modifier.size(12.dp))
-            PaymentScheduleCard()
-            Spacer(Modifier.size(12.dp))
-            LatestGradeCard()
-        }
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(10.dp)
+    ) {
+        LatestNewsCard()
+        Spacer(Modifier.height(12.dp))
+        ClassScheduleCard()
+        Spacer(Modifier.height(12.dp))
+        PaymentScheduleCard()
+        Spacer(Modifier.height(12.dp))
+        LatestGradeCard()
     }
 }
 
@@ -258,7 +256,8 @@ fun LatestGradeCard() {
             Spacer(modifier = Modifier.size(12.dp))
             Text(
                 text = "JEFFERSON PRADO",
-                style = MaterialTheme.typography.caption
+                style = MaterialTheme.typography.caption,
+                fontFamily = Roboto
             )
             Row(
                 Modifier.fillMaxWidth(),
@@ -283,32 +282,13 @@ fun CustomDivider() {
     Divider(color = DividerColor, thickness = 1.5.dp)
 }
 
-//@Preview
-//@Composable
-//fun HomeScreenPreview() {
-//    OneStiAppTheme {
-//        Scaffold(
-//                topBar = {
-//                    HomeTopBar(title = getTitle(DrawerScreens.Home), onButtonClicked = { })
-//                },
-//        ) {
-//            Surface(modifier = Modifier.fillMaxSize()) {
-//                val scrollState = rememberScrollState()
-//                Column(
-//                        Modifier
-//                                .fillMaxSize()
-//                                .verticalScroll(scrollState)
-//                                .padding(10.dp)
-//                ) {
-//                    LatestNewsCard()
-//                    Spacer(Modifier.size(12.dp))
-//                    ClassScheduleCard()
-//                    Spacer(Modifier.size(12.dp))
-//                    PaymentScheduleCard()
-//                    Spacer(Modifier.size(12.dp))
-//                    LatestGradeCard()
-//                }
-//            }
-//        }
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    OneStiAppTheme {
+        Surface {
+            HomeScreen()
+        }
+    }
+}
+

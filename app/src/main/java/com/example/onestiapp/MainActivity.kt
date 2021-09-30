@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -16,11 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.onestiapp.ui.*
 import com.example.onestiapp.ui.components.OneStiNavDrawer
-import com.example.onestiapp.ui.components.OneStiTabLayout
-import com.example.onestiapp.ui.components.OneStiTabRow
 import com.example.onestiapp.ui.components.OneStiTopBar
 import com.example.onestiapp.ui.theme.OneStiAppTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -80,7 +78,9 @@ fun OneStiApp() {
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
     ) { innerPadding ->
-        OneStiNavHost(modifier = Modifier.padding(innerPadding), navController = navController)
+        Surface {
+            OneStiNavHost(modifier = Modifier.padding(innerPadding), navController = navController)
+        }
     }
 }
 
@@ -96,7 +96,7 @@ fun OneStiNavHost(modifier: Modifier = Modifier, navController: NavHostControlle
             HomeScreen()
         }
         composable(route = Screens.Grades.route) {
-            MyGradesScreen()
+            GradesScreen()
         }
         composable(route = Screens.ClassSchedule.route) {
             ClassScheduleScreen()
