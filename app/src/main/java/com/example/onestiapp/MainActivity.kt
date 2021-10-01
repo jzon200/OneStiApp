@@ -78,9 +78,7 @@ fun OneStiApp() {
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
     ) { innerPadding ->
-        Surface {
-            OneStiNavHost(modifier = Modifier.padding(innerPadding), navController = navController)
-        }
+        OneStiNavHost(modifier = Modifier.padding(innerPadding), navController = navController)
     }
 }
 

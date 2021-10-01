@@ -43,7 +43,7 @@ fun HomeScreen() {
 
 @Composable
 fun LatestNewsCard() {
-    Card(elevation = 4.dp) {
+    Card(elevation = 2.dp) {
         Column(
             modifier = Modifier.padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -92,7 +92,7 @@ fun LatestNewsCard() {
 
 @Composable
 fun ClassScheduleCard() {
-    Card(elevation = 4.dp) {
+    Card(elevation = 2.dp) {
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.Center
@@ -178,7 +178,7 @@ private fun ClassScheduleItem(
 
 @Composable
 fun PaymentScheduleCard() {
-    Card(elevation = 4.dp) {
+    Card(elevation = 2.dp) {
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.Center
@@ -232,7 +232,7 @@ fun PaymentScheduleCard() {
 
 @Composable
 fun LatestGradeCard() {
-    Card(elevation = 4.dp) {
+    Card(elevation = 2.dp) {
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.Center
@@ -283,13 +283,11 @@ fun CustomDivider() {
     Divider(color = Amber400, thickness = 1.5.dp)
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, backgroundColor = 0xFFFAFAFA)
 @Composable
 fun HomeScreenPreview() {
     OneStiAppTheme {
-        Surface {
-            HomeScreen()
-        }
+        HomeScreen()
     }
 }
 

@@ -137,7 +137,7 @@ private fun GradesCard(grade: Grade) {
                 Column(Modifier.fillMaxWidth(0.74f)) {
                     Text(
                         text = grade.subjectName,
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.subtitle1,
                     )
                 }
                 Text(
@@ -222,12 +222,10 @@ private fun GradingPeriodItem(gradingPeriod: String, grade: Double?) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, backgroundColor = 0xFFFAFAFA)
 @Composable
 fun GradesScreenPreview() {
     OneStiAppTheme {
-        Surface {
-            GradesScreen()
-        }
+        GradesScreen()
     }
 }
