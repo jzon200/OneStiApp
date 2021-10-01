@@ -46,13 +46,13 @@ val secondYearSecondTermGrades = listOf(
     Grade(
         subjectName = "Enterprise Architecture",
         instructorName = "MARK JAYSON SANTOS",
-        gradesEveryPeriodList = listOf(null, null, null, null),
+        gradesEveryPeriodList = listOf(97.54, 98.87, 96.38, 96.11),
         uploadDate = "06 JUL, 2021"
     ),
     Grade(
         subjectName = "Network Technology 1",
         instructorName = "JEFFERSON PRADO",
-        gradesEveryPeriodList = listOf(null, null, null, null),
+        gradesEveryPeriodList = listOf(99.73, 95.59, 99.13, 98.46),
         uploadDate = "06 JUL, 2021"
     ),
     Grade(

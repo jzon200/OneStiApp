@@ -20,7 +20,7 @@ import com.example.onestiapp.ui.ClassScheduleScreen
 import com.example.onestiapp.ui.GradesScreen
 import com.example.onestiapp.ui.ProgramCurriculumScreen
 import com.example.onestiapp.ui.StudentBalanceScreen
-import com.example.onestiapp.ui.theme.DividerColor
+import com.example.onestiapp.ui.theme.Amber400
 import com.example.onestiapp.ui.theme.OneStiAppTheme
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
@@ -46,7 +46,7 @@ fun OneStiTabRow(
                 // Changed the default color of the Indicator in TabRow
                 Indicator(
                     Modifier.tabIndicatorOffset(tabPosition[state]),
-                    color = DividerColor
+                    color = Amber400
                 )
             }
         ) {
@@ -94,7 +94,7 @@ fun OneStiTabLayout(
                 // and syncs with the scrolls of HorizontalPager
                 Indicator(
                     Modifier.pagerTabIndicatorOffset(pagerState, tabPosition),
-                    color = DividerColor
+                    color = Amber400
                 )
             }
         ) {

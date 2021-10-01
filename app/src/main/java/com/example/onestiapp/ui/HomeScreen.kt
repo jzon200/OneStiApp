@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.onestiapp.R
-import com.example.onestiapp.Screens
 import com.example.onestiapp.data.ClassSchedule
 import com.example.onestiapp.data.getClassSchedule
 import com.example.onestiapp.data.getDate
@@ -61,7 +61,7 @@ fun LatestNewsCard() {
                 Text(
                     text = "MORE NEWS",
                     style = MaterialTheme.typography.overline,
-                    color = PrimaryColor
+                    color = MaterialTheme.colors.primary
                 )
             }
             Spacer(modifier = Modifier.size(4.dp))
@@ -82,7 +82,8 @@ fun LatestNewsCard() {
                 Spacer(modifier = Modifier.size(12.dp))
                 Text(
                     text = "Find out how STI turns students into job-ready individuals through SAP Business One Cloud System.",
-                    style = MaterialTheme.typography.overline
+                    style = MaterialTheme.typography.overline,
+                    fontFamily = OpenSans
                 )
             }
         }
@@ -138,7 +139,7 @@ private fun ClassScheduleItem(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .background(color)
-                .height(64.dp)
+                .height(58.dp)
                 .width(96.dp)
         ) {
             Column(
@@ -166,10 +167,10 @@ private fun ClassScheduleItem(
                 text = schedule.courseSubject,
                 style = MaterialTheme.typography.subtitle2
             )
-            Spacer(Modifier.size(4.dp))
+            Spacer(Modifier.height(2.dp))
             Text(
-                text = "${schedule.classRoom}|${schedule.classProfessor}",
-                style = MaterialTheme.typography.caption
+                text = "${schedule.classRoom} | ${schedule.classProfessor.uppercase()}",
+                style = MaterialTheme.typography.overline
             )
         }
     }
@@ -194,7 +195,7 @@ fun PaymentScheduleCard() {
                 Text(
                     text = "VIEW ALL",
                     style = MaterialTheme.typography.overline,
-                    color = PrimaryColor
+                    color = MaterialTheme.colors.primary
                 )
             }
             Spacer(modifier = Modifier.size(4.dp))
@@ -248,16 +249,15 @@ fun LatestGradeCard() {
                 Text(
                     text = "VIEW ALL",
                     style = MaterialTheme.typography.overline,
-                    color = PrimaryColor
+                    color = MaterialTheme.colors.primary
                 )
             }
             Spacer(modifier = Modifier.size(4.dp))
             CustomDivider()
-            Spacer(modifier = Modifier.size(12.dp))
+            Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = "JEFFERSON PRADO",
-                style = MaterialTheme.typography.caption,
-                fontFamily = Roboto
+                style = MaterialTheme.typography.caption
             )
             Row(
                 Modifier.fillMaxWidth(),
@@ -270,7 +270,8 @@ fun LatestGradeCard() {
                 Text(
                     text = "100.00",
                     style = MaterialTheme.typography.body2,
-                    color = PrimaryColor
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colors.primary,
                 )
             }
         }
@@ -279,7 +280,7 @@ fun LatestGradeCard() {
 
 @Composable
 fun CustomDivider() {
-    Divider(color = DividerColor, thickness = 1.5.dp)
+    Divider(color = Amber400, thickness = 1.5.dp)
 }
 
 @Preview(showBackground = true)

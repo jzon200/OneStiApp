@@ -24,11 +24,7 @@ fun OneStiTopBar(
     Column {
         TopAppBar(
             title = {
-                Text(
-                    text = currentScreen.title,
-                    style = MaterialTheme.typography.subtitle1,
-                    color = Color.White
-                )
+                Text(text = currentScreen.title)
             },
             navigationIcon = {
                 IconButton(onClick = { onButtonClicked() }) {

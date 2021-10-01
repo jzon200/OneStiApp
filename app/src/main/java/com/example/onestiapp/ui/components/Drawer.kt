@@ -13,13 +13,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.onestiapp.*
 import com.example.onestiapp.R
+import com.example.onestiapp.Screens
+import com.example.onestiapp.drawerScreens
 import com.example.onestiapp.ui.CustomDivider
 import com.example.onestiapp.ui.theme.DrawerContentIconColor
 import com.example.onestiapp.ui.theme.DrawerHighlightRowColor
 import com.example.onestiapp.ui.theme.OneStiAppTheme
-import com.example.onestiapp.ui.theme.PrimaryColor
 
 
 @Composable
@@ -44,7 +44,7 @@ fun OneStiDrawerProfile() {
         Text(
             text = "MY PROFILE",
             style = MaterialTheme.typography.overline,
-            color = PrimaryColor,
+            color = MaterialTheme.colors.primary,
             modifier = Modifier.padding(
                 top = 8.dp,
                 bottom = 4.dp
@@ -101,7 +101,7 @@ fun OneStiNavDrawer(
             Text(
                 text = "Information",
                 style = MaterialTheme.typography.subtitle2,
-                color = PrimaryColor,
+                color = MaterialTheme.colors.primary,
                 modifier = Modifier.padding(12.dp)
             )
             // Iterate Information Drawer Rows
@@ -120,7 +120,7 @@ fun OneStiNavDrawer(
             Text(
                 text = "Others",
                 style = MaterialTheme.typography.subtitle2,
-                color = PrimaryColor,
+                color = MaterialTheme.colors.primary,
                 modifier = Modifier.padding(12.dp)
             )
             for (index in 5 until rowItems.size) {
@@ -162,7 +162,7 @@ private fun NavDrawerRowItem(
         Spacer(modifier = modifier.size(16.dp))
         Text(
             text = item.title,
-            style = MaterialTheme.typography.subtitle2,
+            style = MaterialTheme.typography.button,
         )
     }
 }

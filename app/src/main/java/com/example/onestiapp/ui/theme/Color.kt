@@ -2,9 +2,9 @@ package com.example.onestiapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val PrimaryColor = Color(0xFF0B5793)
+val LightBlue900 = Color(0xFF01579B)
 val SurfaceColor = Color(0xFFEAEEF1)
-val DividerColor = Color(0xFFE7C01E)
+val Amber400 = Color(0xFFFFCA28)
 // Course Subject Color
 val courseSubjectColor = listOf(
     Color(0xFF2B82C9),
@@ -18,7 +18,7 @@ val courseSubjectColor = listOf(
 
 // Drawer Icon color
 val DrawerContentIconColor = Color(0xFF656565)
-val DrawerHighlightRowColor = Color(0xFFE4E4E4)
+val DrawerHighlightRowColor = Color(0xFFE1E2E1)
 
 // Grades Typography/Iconography Color
 val GradesSectionColor = Color(0xFF535252)
