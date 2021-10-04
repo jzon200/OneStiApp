@@ -11,18 +11,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.onestiapp.data.Grade
 import com.example.onestiapp.data.getCourseGrade
 import com.example.onestiapp.data.secondYearSecondTermGrades
 import com.example.onestiapp.ui.theme.GradesSectionColor
 import com.example.onestiapp.ui.theme.OneStiAppTheme
+import com.example.onestiapp.ui.theme.Roboto
 
 @Composable
 fun GradesScreen() {
@@ -40,6 +42,7 @@ fun GradesScreen() {
 
 @Composable
 private fun SchoolTermButton() {
+    var openDialog by remember { mutableStateOf(false) }
     Card(
         elevation = 1.5.dp,
         shape = RoundedCornerShape(12.dp),
@@ -51,7 +54,7 @@ private fun SchoolTermButton() {
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) {
-
+                openDialog = true
             }
     ) {
         Row(
@@ -76,41 +79,73 @@ private fun SchoolTermButton() {
             )
         }
     }
+
+    if (openDialog) {
+        OneStiSelectionDialog(
+            onDismiss = { openDialog = false },
+            title = "School Year/Term",
+            items = listOf(
+                "2021-2022 First Term",
+                "2020-2021 Second Term",
+                "2020-2021 First Term",
+                "2019-2020 Second Term",
+                "2019-2020 First Term",
+            )
+        )
+    }
 }
 
-//@Composable
-//fun SchoolTermDialogCard() {
-//    var openDialog by remember { mutableStateOf(false) }
-//
-//    if (openDialog) {
-//
-//    }
-//}
-//
-//@Composable
-//fun SchoolTermDialog(
-//    onDismiss: () -> Unit,
-//    titleText: String = "School Year/Term",
-//    buttonText: String = "CANCEL"
-//) {
-//    AlertDialog(
-//        onDismissRequest = onDismiss,
-//
-//        title = {
-//            Text(text = titleText)
-//        },
-//        text = {
-//            Text(
-//                buttonText
-//            )
-//        },
-//        buttons = {
-//            TextButton(onClick = onDismiss) {
-//                Text(buttonText)
-//            }
-//        }
-//    )
-//}
+@Composable
+fun OneStiSelectionDialog(
+    onDismiss: () -> Unit,
+    title: String = "School Year/ Term",
+    items: List<String>
+) {
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+
+        title = {
+            Text(text = title, style = MaterialTheme.typography.subtitle1.copy(fontSize = 18.sp, fontFamily = Roboto))
+        },
+        text = {
+            Column {
+                items.forEach {
+                    OneStiSelectionRowItem(title = it) {
+
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            // No Confirm Button
+        },
+        dismissButton = {
+            TextButton(onClick = { onDismiss() }) {
+                Text("CANCEL", style = MaterialTheme.typography.caption)
+            }
+        }
+    )
+}
+
+@Composable
+fun OneStiSelectionRowItem(
+    modifier: Modifier = Modifier,
+    title: String,
+    onItemClicked: () -> Unit,
+) {
+    Row(
+        modifier
+            .fillMaxWidth()
+            .size(42.dp)
+            .clickable { onItemClicked() },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.onBackground)
+        )
+    }
+}
 
 @Composable
 fun GradesListColumn(grades: List<Grade>) {
@@ -137,12 +172,12 @@ private fun GradesCard(grade: Grade) {
                 Column(Modifier.fillMaxWidth(0.74f)) {
                     Text(
                         text = grade.subjectName,
-                        style = MaterialTheme.typography.subtitle1,
+                        style = MaterialTheme.typography.subtitle1.copy(fontSize = 17.sp),
                     )
                 }
                 Text(
                     text = getCourseGrade(grade.gradesEveryPeriodList),
-                    style = MaterialTheme.typography.subtitle1,
+                    style = MaterialTheme.typography.subtitle1.copy(fontSize = 17.sp),
                     modifier = Modifier.padding(end = 8.dp)
                 )
             }
@@ -215,14 +250,15 @@ private fun GradingPeriodItem(gradingPeriod: String, grade: Double?) {
         )
         Text(
             text = String.format("%.2f", grade),
-            style = MaterialTheme.typography.body2,
-            color = MaterialTheme.colors.primary,
-            fontWeight = FontWeight.Medium
+            style = MaterialTheme.typography.body2.copy(
+                MaterialTheme.colors.primary,
+                fontWeight = FontWeight.Medium
+            )
         )
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFAFAFA)
+@Preview(showBackground = true, backgroundColor = 0xFFEDF1F4)
 @Composable
 fun GradesScreenPreview() {
     OneStiAppTheme {

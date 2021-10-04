@@ -60,8 +60,10 @@ fun LatestNewsCard() {
                 )
                 Text(
                     text = "MORE NEWS",
-                    style = MaterialTheme.typography.overline,
-                    color = MaterialTheme.colors.primary
+                    style = MaterialTheme.typography.overline.copy(
+                        color = MaterialTheme.colors.primary,
+                        fontWeight = FontWeight.Medium
+                    ),
                 )
             }
             Spacer(modifier = Modifier.size(4.dp))
@@ -82,8 +84,7 @@ fun LatestNewsCard() {
                 Spacer(modifier = Modifier.size(12.dp))
                 Text(
                     text = "Find out how STI turns students into job-ready individuals through SAP Business One Cloud System.",
-                    style = MaterialTheme.typography.overline,
-                    fontFamily = OpenSans
+                    style = MaterialTheme.typography.overline.copy(fontFamily = OpenSans)
                 )
             }
         }
@@ -151,13 +152,11 @@ private fun ClassScheduleItem(
             ) {
                 Text(
                     text = schedule.classStart,
-                    style = MaterialTheme.typography.subtitle2,
-                    color = Color.White
+                    style = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.onPrimary),
                 )
                 Text(
                     text = "to ${schedule.classEnd}",
-                    style = MaterialTheme.typography.caption,
-                    color = Color.White
+                    style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onPrimary),
                 )
             }
         }
@@ -194,12 +193,17 @@ fun PaymentScheduleCard() {
                 )
                 Text(
                     text = "VIEW ALL",
-                    style = MaterialTheme.typography.overline,
-                    color = MaterialTheme.colors.primary
+                    style = MaterialTheme.typography.overline.copy(
+                        color = MaterialTheme.colors.primary,
+                        fontWeight = FontWeight.Medium
+                    )
                 )
             }
             Spacer(modifier = Modifier.size(4.dp))
-            Text(text = "AS OF ${getDate()}", style = MaterialTheme.typography.overline)
+            Text(
+                text = "AS OF ${getDate()}",
+                style = MaterialTheme.typography.overline
+            )
             Spacer(modifier = Modifier.size(6.dp))
             CustomDivider()
             Spacer(modifier = Modifier.size(12.dp))
@@ -248,8 +252,10 @@ fun LatestGradeCard() {
                 )
                 Text(
                     text = "VIEW ALL",
-                    style = MaterialTheme.typography.overline,
-                    color = MaterialTheme.colors.primary
+                    style = MaterialTheme.typography.overline.copy(
+                        color = MaterialTheme.colors.primary,
+                        fontWeight = FontWeight.Medium
+                    ),
                 )
             }
             Spacer(modifier = Modifier.size(4.dp))
@@ -269,9 +275,10 @@ fun LatestGradeCard() {
                 )
                 Text(
                     text = "100.00",
-                    style = MaterialTheme.typography.body2,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colors.primary,
+                    style = MaterialTheme.typography.body2.copy(
+                        color = MaterialTheme.colors.primary,
+                        fontWeight = FontWeight.Medium
+                    ),
                 )
             }
         }
@@ -283,7 +290,7 @@ fun CustomDivider() {
     Divider(color = Amber400, thickness = 1.5.dp)
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFAFAFA)
+@Preview(showBackground = true, backgroundColor = 0xFFEDF1F4)
 @Composable
 fun HomeScreenPreview() {
     OneStiAppTheme {
