@@ -55,14 +55,14 @@ val mondayScheduleList = listOf(
         classProfessor = "PEDION, III OCTAVIO"
     ),
     ClassSchedule(
-        courseSubject = "Data And Digital Communications (Data Communications)",
+        courseSubject = "Data and Digital Communications (Data Communications)",
         classStart = "09:30 AM",
         classEnd = "11:00 AM",
         classRoom = "310",
-        classProfessor = "TBA"
+        classProfessor = "Rommel Ramos"
     ),
     ClassSchedule(
-        courseSubject = "Professional Issues In Information Systems And Technology",
+        courseSubject = "Professional Issues in Information Systems and Technology",
         classStart = "12:30 PM",
         classEnd = "02:00 PM",
         classRoom = "311",
@@ -72,39 +72,39 @@ val mondayScheduleList = listOf(
 
 val tuesdayScheduleList = listOf(
     ClassSchedule(
-        courseSubject = "Integrative Programming",
-        classStart = "08:30 AM",
-        classEnd = "11:30 AM",
-        classRoom = "Comlab 3",
-        classProfessor = "JOHN CARLO MAMUYAC"
-    ),
-    ClassSchedule(
         courseSubject = "Event-Driven Programming",
         classStart = "08:30 AM",
         classEnd = "11:30 AM",
         classRoom = "Comlab 3",
-        classProfessor = "JOHN CARLO MAMUYAC"
+        classProfessor = "Jerico Bello"
+    ),
+    ClassSchedule(
+        courseSubject = "Integrative Programming",
+        classStart = "08:30 AM",
+        classEnd = "11:30 AM",
+        classRoom = "Comlab 3",
+        classProfessor = "Jerico Bello"
     ),
     ClassSchedule(
         courseSubject = "Event-Driven Programming",
         classStart = "01:00 PM",
         classEnd = "03:00 PM",
         classRoom = "312",
-        classProfessor = "JOHN CARLO MAMUYAC"
+        classProfessor = "Jerico Bello"
     ),
     ClassSchedule(
         courseSubject = "Integrative Programming",
         classStart = "01:00 PM",
         classEnd = "03:00 PM",
         classRoom = "312",
-        classProfessor = "JOHN CARLO MAMUYAC"
+        classProfessor = "Jerico Bello"
     ),
     ClassSchedule(
         courseSubject = "Application Development and Emerging Technologies",
         classStart = "03:00 PM",
         classEnd = "04:00 PM",
         classRoom = "312",
-        classProfessor = "TBA"
+        classProfessor = "Abram Vicencio"
     ),
 )
 
@@ -121,14 +121,14 @@ val wednesdayScheduleList = listOf(
         classStart = "01:00 PM",
         classEnd = "04:00 PM",
         classRoom = "Comlab 2",
-        classProfessor = "TBA"
+        classProfessor = "Abram Vicencio"
     ),
     ClassSchedule(
         courseSubject = "Programming Languages",
         classStart = "04:00 PM",
         classEnd = "05:30 AM",
         classRoom = "TBA",
-        classProfessor = "TBA"
+        classProfessor = "Felipe Ante"
     ),
 )
 
@@ -138,14 +138,14 @@ val thursdayScheduleList = listOf(
         classStart = "07:30 AM",
         classEnd = "09:30 AM",
         classRoom = "310",
-        classProfessor = "TBA"
+        classProfessor = "Felipe Ante"
     ),
     ClassSchedule(
-        courseSubject = "Data And Digital Communications (Data Communications)",
+        courseSubject = "Data and Digital Communications (Data Communications)",
         classStart = "09:30 AM",
         classEnd = "11:00 AM",
         classRoom = "310",
-        classProfessor = "TBA"
+        classProfessor = "Rommel Ramos"
     ),
     ClassSchedule(
         courseSubject = "Professional Issues In Information Systems And Technology",
@@ -158,70 +158,70 @@ val thursdayScheduleList = listOf(
         courseSubject = "Physical Education 4 (Team Sports)",
         classStart = "02:30 PM",
         classEnd = "04:30 PM",
-        classRoom = "311",
+        classRoom = "PE Court C",
         classProfessor = "VENJAMIN PAUL LAGRIMAS"
     ),
 )
 
 val fridayScheduleList = listOf(
     ClassSchedule(
-        courseSubject = "Integrative Programming",
-        classStart = "08:30 AM",
-        classEnd = "11:30 AM",
-        classRoom = "Comlab 3",
-        classProfessor = "JOHN CARLO MAMUYAC"
-    ),
-    ClassSchedule(
         courseSubject = "Event-Driven Programming",
         classStart = "08:30 AM",
         classEnd = "11:30 AM",
         classRoom = "Comlab 3",
-        classProfessor = "JOHN CARLO MAMUYAC"
+        classProfessor = "Jerico Bello"
+    ),
+    ClassSchedule(
+        courseSubject = "Integrative Programming",
+        classStart = "08:30 AM",
+        classEnd = "11:30 AM",
+        classRoom = "Comlab 3",
+        classProfessor = "Jerico Bello"
     ),
     ClassSchedule(
         courseSubject = "Event-Driven Programming",
         classStart = "01:00 PM",
         classEnd = "03:00 PM",
         classRoom = "312",
-        classProfessor = "JOHN CARLO MAMUYAC"
+        classProfessor = "Jerico Bello"
     ),
     ClassSchedule(
         courseSubject = "Integrative Programming",
         classStart = "01:00 PM",
         classEnd = "03:00 PM",
         classRoom = "312",
-        classProfessor = "JOHN CARLO MAMUYAC"
+        classProfessor = "Jerico Bello"
     ),
     ClassSchedule(
         courseSubject = "Application Development and Emerging Technologies",
         classStart = "03:00 PM",
         classEnd = "04:00 PM",
         classRoom = "312",
-        classProfessor = "TBA"
+        classProfessor = "Abram Vicencio"
     ),
 )
 
 val saturdayScheduleList = listOf(
     ClassSchedule(
-        courseSubject = "Information Assurance & Security (Cybersecurity Fundamentals)",
+        courseSubject = "Advanced Database Systems",
         classStart = "07:30 AM",
         classEnd = "10:30 AM",
         classRoom = "TBA",
-        classProfessor = "JOHN CARLO MAMUYAC"
+        classProfessor = "Jerico Bello"
     ),
     ClassSchedule(
-        courseSubject = "Data And Digital Communications (Data Communications)",
+        courseSubject = "Advanced Database Systems",
         classStart = "11:00 AM",
         classEnd = "01:00 PM",
         classRoom = "311",
-        classProfessor = "JOHN CARLO MAMUYAC"
+        classProfessor = "Jerico Bello"
     ),
     ClassSchedule(
-        courseSubject = "Professional Issues In Information Systems And Technology",
+        courseSubject = "Programming Languages",
         classStart = "03:00 PM",
         classEnd = "04:30 PM",
         classRoom = "TBA",
-        classProfessor = "TBA"
+        classProfessor = "Felipe Ante"
     ),
 )
 

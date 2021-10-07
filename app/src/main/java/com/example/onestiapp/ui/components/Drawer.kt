@@ -43,8 +43,7 @@ fun OneStiDrawerProfile() {
         // Hard-coded yet
         Text(
             text = "MY PROFILE",
-            style = MaterialTheme.typography.overline,
-            color = MaterialTheme.colors.primary,
+            style = MaterialTheme.typography.overline.copy(color = MaterialTheme.colors.primary),
             modifier = Modifier.padding(
                 top = 8.dp,
                 bottom = 4.dp
@@ -100,8 +99,7 @@ fun OneStiNavDrawer(
             // Information Section
             Text(
                 text = "Information",
-                style = MaterialTheme.typography.subtitle2,
-                color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primary),
                 modifier = Modifier.padding(12.dp)
             )
             // Iterate Information Drawer Rows
