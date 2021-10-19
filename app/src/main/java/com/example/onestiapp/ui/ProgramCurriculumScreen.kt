@@ -2,21 +2,24 @@ package com.example.onestiapp.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateValueAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTimeFilled
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Launch
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -25,8 +28,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.onestiapp.data.CourseSubject
 import com.example.onestiapp.data.firstYearFirstTermSubjects
+import com.example.onestiapp.data.firstYearSecondTermSubjects
 import com.example.onestiapp.data.getDate
 import com.example.onestiapp.ui.theme.DrawerContentIconColor
 import com.example.onestiapp.ui.theme.OneStiAppTheme
@@ -39,6 +44,7 @@ import com.example.onestiapp.ui.theme.courseSubjectColor
 fun ProgramCurriculumScreen() {
     // Holds the topic that is currently expanded to show its body.
     var expandedTopic by remember { mutableStateOf<String?>(null) }
+    val rotateIcon by animateFloatAsState(if (expandedTopic != null) 180f else 0f)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,54 +78,36 @@ fun ProgramCurriculumScreen() {
                         imageVector = Icons.Default.Launch,
                         contentDescription = Icons.Default.Launch.name,
                         tint = MaterialTheme.colors.primary,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier
+                            .size(18.dp)
+                            .rotate(rotateIcon)
+                            .clickable {
+                                expandedTopic =
+                                    if (expandedTopic == "First Term" || expandedTopic == "Second Term") null else "First Term"
+                            }
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomDivider()
                 Spacer(modifier = Modifier.height(10.dp))
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    onClick = {
-                        expandedTopic = if (expandedTopic == "First Term") null else "First Term"
-                    }
+                TermRow(
+                    term = "First Term",
+                    subjectItems = firstYearFirstTermSubjects,
+                    expanded = expandedTopic == "First Term"
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
-                            .animateContentSize()
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Launch,
-                                contentDescription = Icons.Default.Launch.name,
-                                tint = MaterialTheme.colors.primary,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = " First Term",
-                                style = MaterialTheme.typography.body1.copy(
-                                    color = MaterialTheme.colors.primary,
-                                    fontWeight = FontWeight.Medium,
-                                    textDecoration = TextDecoration.Underline
-                                )
-                            )
-                        }
-                        if (expandedTopic == "First Term") {
-                            firstYearFirstTermSubjects.forEach { courseSubject ->
-                                FirstYearSubjectRow(courseSubject)
-                            }
-                        }
-                    }
+                    expandedTopic = if (expandedTopic == "First Term") null else "First Term"
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                TermRow(
+                    term = "Second Term",
+                    subjectItems = firstYearSecondTermSubjects,
+                    expanded = expandedTopic == "Second Term"
+                ) {
+                    expandedTopic = if (expandedTopic == "Second Term") null else "Second Term"
                 }
             }
-            TermRowSpacer(visible = expandedTopic == "First Term")
         }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
@@ -193,44 +181,57 @@ private fun FirstYearSubjectRow(
             )
         }
     }
-    Divider(modifier = Modifier.padding(top = 8.dp))
 }
 
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable
-fun TermRow(topic: String, expanded: Boolean, onClick: () -> Unit) {
+fun TermRow(
+    term: String,
+    subjectItems: List<CourseSubject>,
+    expanded: Boolean,
+    onClick: () -> Unit
+) {
+    val rotateIcon by animateFloatAsState(if (expanded) 180f else 0f)
     TermRowSpacer(visible = expanded)
     Surface(
-        modifier = Modifier
-            .fillMaxWidth(),
-        elevation = 2.dp,
+        modifier = Modifier.fillMaxWidth(),
         onClick = onClick
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
-                // This `Column` animates its size when its content changes.
                 .animateContentSize()
         ) {
-            Row {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(
-                    imageVector = Icons.Default.Info,
-                    contentDescription = null
+                    imageVector = Icons.Default.Launch,
+                    contentDescription = Icons.Default.Launch.name,
+                    tint = MaterialTheme.colors.primary,
+                    modifier = Modifier
+                        .size(18.dp)
+                        .rotate(rotateIcon)
                 )
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = topic,
-                    style = MaterialTheme.typography.body1
+                    text = " $term",
+                    style = MaterialTheme.typography.body1.copy(
+                        color = MaterialTheme.colors.primary,
+                        fontWeight = FontWeight.Medium,
+                        textDecoration = TextDecoration.Underline
+                    )
                 )
             }
             if (expanded) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    textAlign = TextAlign.Justify
-                )
+                subjectItems.forEach { courseSubject ->
+                    FirstYearSubjectRow(courseSubject)
+                    if (courseSubject != subjectItems.last()){
+                        Divider(modifier = Modifier.padding(top = 8.dp))
+                    }
+                }
             }
         }
     }
