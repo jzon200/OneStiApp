@@ -2,7 +2,9 @@ package com.example.onestiapp.ui.components
 
 import android.content.ContentValues
 import android.util.Log
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
@@ -78,6 +80,8 @@ fun OneStiTabRow(
  * This composable [ExperimentalPagerApi] may vary in the future.
  * I would not use it for now :((
  */
+@ExperimentalMaterialApi
+@ExperimentalAnimationApi
 @ExperimentalPagerApi
 @Composable
 fun OneStiTabLayout(
@@ -121,6 +125,8 @@ fun OneStiTabLayout(
 }
 
 
+@ExperimentalAnimationApi
+@ExperimentalMaterialApi
 @ExperimentalPagerApi
 @Composable
 private fun OneStiHorizontalPager(pagerState: PagerState) {

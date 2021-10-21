@@ -1,37 +1,32 @@
 package com.example.onestiapp.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateValueAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.AccessTimeFilled
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Launch
 import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.example.onestiapp.data.CourseSubject
-import com.example.onestiapp.data.firstYearFirstTermSubjects
-import com.example.onestiapp.data.firstYearSecondTermSubjects
+import com.example.onestiapp.data.ProgramCurriculum
 import com.example.onestiapp.data.getDate
 import com.example.onestiapp.ui.theme.DrawerContentIconColor
 import com.example.onestiapp.ui.theme.OneStiAppTheme
@@ -42,13 +37,11 @@ import com.example.onestiapp.ui.theme.courseSubjectColor
 @ExperimentalAnimationApi
 @Composable
 fun ProgramCurriculumScreen() {
-    // Holds the topic that is currently expanded to show its body.
-    var expandedTopic by remember { mutableStateOf<String?>(null) }
-    val rotateIcon by animateFloatAsState(if (expandedTopic != null) 180f else 0f)
+    val programCurriculum = ProgramCurriculum.values().toList()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(14.dp)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -58,142 +51,93 @@ fun ProgramCurriculumScreen() {
             taken = 97
         )
         ProgramCurriculumIndicatorIcons()
-        Card(elevation = 4.dp) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "First Year",
-                        style = MaterialTheme.typography.subtitle1
-                    )
-                    Icon(
-                        imageVector = Icons.Default.Launch,
-                        contentDescription = Icons.Default.Launch.name,
-                        tint = MaterialTheme.colors.primary,
-                        modifier = Modifier
-                            .size(18.dp)
-                            .rotate(rotateIcon)
-                            .clickable {
-                                expandedTopic =
-                                    if (expandedTopic == "First Term" || expandedTopic == "Second Term") null else "First Term"
-                            }
-                    )
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                CustomDivider()
-                Spacer(modifier = Modifier.height(10.dp))
-                TermRow(
-                    term = "First Term",
-                    subjectItems = firstYearFirstTermSubjects,
-                    expanded = expandedTopic == "First Term"
-                ) {
-                    expandedTopic = if (expandedTopic == "First Term") null else "First Term"
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                TermRow(
-                    term = "Second Term",
-                    subjectItems = firstYearSecondTermSubjects,
-                    expanded = expandedTopic == "Second Term"
-                ) {
-                    expandedTopic = if (expandedTopic == "Second Term") null else "Second Term"
-                }
-            }
+        programCurriculum.forEach {
+            YearCurriculumCard(
+                programCurriculum = it
+            )
         }
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
+@ExperimentalAnimationApi
+@ExperimentalMaterialApi
 @Composable
-private fun FirstYearSubjectRow(
-    courseSubject: CourseSubject
+private fun YearCurriculumCard(
+    programCurriculum: ProgramCurriculum,
 ) {
-    Spacer(modifier = Modifier.height(8.dp))
-    val statusIcon = when (courseSubject.status) {
-        "Taken" -> Icons.Default.CheckCircle
-        "In-progress" -> Icons.Default.AccessTimeFilled
-        else -> Icons.Outlined.Circle
-    }
-    val statusIconTint = when (courseSubject.status) {
-        "Taken" -> courseSubjectColor.last()
-        "In-progress" -> courseSubjectColor[1]
-        else -> DrawerContentIconColor
-    }
-
-    Row(Modifier.fillMaxWidth()) {
-        Icon(
-            imageVector = statusIcon,
-            contentDescription = statusIcon.name,
-            tint = statusIconTint,
-            modifier = Modifier
-                .size(18.dp)
-                .offset(y = 1.dp)
-        )
+    var expandedState by remember { mutableStateOf(false) } // First Term
+    var expandedState2 by remember { mutableStateOf(false) } // Second Term
+    val rotateIcon by animateFloatAsState(if (expandedState || expandedState2) 180f else 0f)
+    Card(elevation = 2.dp) {
         Column(
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 8.dp),
+                .padding(16.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = courseSubject.subjectName,
-                style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = buildAnnotatedString {
-                    append(text = "Units: ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
-                        append(String.format("%.2f", courseSubject.unitsRequired))
-                    }
-                    append(text = " required, ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
-                        append(String.format("%.2f", courseSubject.unitsRequired))
-                    }
-                    append(text = " taken")
-                },
-                style = MaterialTheme.typography.body2
-            )
-            Text(
-                text = buildAnnotatedString {
-                    append(text = "Grade: ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
-                        append(text = String.format("%.2f", courseSubject.grade))
-                    }
-                },
-                style = MaterialTheme.typography.body2
-            )
-            Text(
-                text = buildAnnotatedString {
-                    append(text = "Term Taken: ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
-                        append(text = courseSubject.termTaken.toString())
-                    }
-                },
-                style = MaterialTheme.typography.body2
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = programCurriculum.title, // First Year ...
+                    style = MaterialTheme.typography.subtitle1
+                )
+                Icon(
+                    imageVector = Icons.Default.Launch,
+                    contentDescription = Icons.Default.Launch.name,
+                    tint = MaterialTheme.colors.primary,
+                    modifier = Modifier
+                        .size(18.dp)
+                        .rotate(rotateIcon)
+                        .clickable {
+                            if (!expandedState && !expandedState2) {
+                                expandedState = true
+                                expandedState2 = true
+                            } else if (expandedState || expandedState2) {
+                                expandedState = false
+                                expandedState2 = false
+                            }
+                        }
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            CustomDivider()
+            // First Term
+            Spacer(modifier = Modifier.height(10.dp))
+            TermRow(
+                term = "First Term",
+                subjectItems = programCurriculum.firstTermSubjects,
+                expanded = expandedState
+            ) {
+                expandedState = !expandedState
+            }
+            // Second Term
+            Spacer(modifier = Modifier.height(10.dp))
+            TermRow(
+                term = "Second Term",
+                subjectItems = programCurriculum.secondTermSubjects,
+                expanded = expandedState2
+            ) {
+                expandedState2 = !expandedState2
+            }
         }
     }
+    // Card Spacing
+    Spacer(modifier = Modifier.height(8.dp))
 }
 
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable
-fun TermRow(
+private fun TermRow(
     term: String,
     subjectItems: List<CourseSubject>,
     expanded: Boolean,
     onClick: () -> Unit
 ) {
     val rotateIcon by animateFloatAsState(if (expanded) 180f else 0f)
-    TermRowSpacer(visible = expanded)
     Surface(
         modifier = Modifier.fillMaxWidth(),
         onClick = onClick
@@ -227,22 +171,110 @@ fun TermRow(
             }
             if (expanded) {
                 subjectItems.forEach { courseSubject ->
-                    FirstYearSubjectRow(courseSubject)
-                    if (courseSubject != subjectItems.last()){
+                    SubjectColumn(courseSubject = courseSubject)
+                    if (courseSubject != subjectItems.last()) {
                         Divider(modifier = Modifier.padding(top = 8.dp))
                     }
                 }
             }
         }
     }
-    TermRowSpacer(visible = expanded)
 }
 
-@ExperimentalAnimationApi
 @Composable
-fun TermRowSpacer(visible: Boolean) {
-    AnimatedVisibility(visible = visible) {
-        Spacer(modifier = Modifier.height(8.dp))
+private fun SubjectColumn(
+    courseSubject: CourseSubject
+) {
+    Spacer(modifier = Modifier.height(8.dp))
+    val statusIcon = when (courseSubject.status) {
+        "Taken" -> Icons.Default.CheckCircle
+        "In-progress" -> Icons.Default.AccessTimeFilled
+        else -> Icons.Outlined.Circle
+    }
+    val statusIconTint = when (courseSubject.status) {
+        "Taken" -> courseSubjectColor.last()
+        "In-progress" -> courseSubjectColor[1]
+        else -> DrawerContentIconColor
+    }
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)) {
+        Icon(
+            imageVector = statusIcon,
+            contentDescription = statusIcon.name,
+            tint = statusIconTint,
+            modifier = Modifier
+                .size(18.dp)
+                .offset(y = 1.dp)
+        )
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = courseSubject.subjectName,
+                style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            // Units
+            Text(
+                text = buildAnnotatedString {
+                    append(text = "Units: ")
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
+                        append(String.format("%.2f", courseSubject.unitsRequired))
+                    }
+                    append(text = " required")
+                    if (courseSubject.unitsTaken != null) {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
+                            append(", ${String.format("%.2f", courseSubject.unitsTaken)}")
+                        }
+                        append(text = " taken")
+                    }
+                },
+                style = MaterialTheme.typography.body2
+            )
+            // Grade
+            if (courseSubject.grade != null) {
+                Text(
+                    text = buildAnnotatedString {
+                        append(text = "Grade: ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
+                            append(text = courseSubject.grade)
+                        }
+                    },
+                    style = MaterialTheme.typography.body2
+                )
+            }
+            // Term Taken
+            if (courseSubject.termTaken != null) {
+                Text(
+                    text = buildAnnotatedString {
+                        append(text = "Term Taken: ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
+                            append(text = courseSubject.termTaken.toString())
+                        }
+                    },
+                    style = MaterialTheme.typography.body2
+                )
+            }
+            // Pre-requisite
+            if (courseSubject.preRequisite != null) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = buildAnnotatedString {
+                        append(text = "Pre - Requisite / Co - Requisite: ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
+                            append(text = courseSubject.preRequisite)
+                        }
+                    },
+                    style = MaterialTheme.typography.body2
+                )
+            }
+        }
     }
 }
 
