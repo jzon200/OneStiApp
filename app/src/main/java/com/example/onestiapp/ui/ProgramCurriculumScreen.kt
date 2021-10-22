@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.example.onestiapp.data.CourseSubject
 import com.example.onestiapp.data.ProgramCurriculum
 import com.example.onestiapp.data.getDate
+import com.example.onestiapp.ui.components.OneStiDivider
 import com.example.onestiapp.ui.theme.DrawerContentIconColor
 import com.example.onestiapp.ui.theme.OneStiAppTheme
 import com.example.onestiapp.ui.theme.courseSubjectColor
@@ -103,7 +104,7 @@ private fun YearCurriculumCard(
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
-            CustomDivider()
+            OneStiDivider()
             // First Term
             Spacer(modifier = Modifier.height(10.dp))
             TermRow(
@@ -367,7 +368,7 @@ private fun ProgramCurriculumCard(
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            CustomDivider()
+            OneStiDivider()
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 buildAnnotatedString {

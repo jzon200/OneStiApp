@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.example.onestiapp.data.Grade
 import com.example.onestiapp.data.getCourseGrade
 import com.example.onestiapp.data.secondYearSecondTermGrades
+import com.example.onestiapp.ui.components.OneStiDivider
 import com.example.onestiapp.ui.components.OneStiSelectionButton
 import com.example.onestiapp.ui.theme.GradesSectionColor
 import com.example.onestiapp.ui.theme.OneStiAppTheme
@@ -78,7 +79,7 @@ private fun GradesCard(grade: Grade) {
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            CustomDivider()
+            OneStiDivider()
             Spacer(modifier = Modifier.height(6.dp))
 
             // Iterates the Grades of every grading period

@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.onestiapp.ui.theme.Roboto
 
 /**
@@ -78,7 +77,7 @@ fun OneStiSelectionButton(
 }
 
 @Composable
-fun OneStiSelectionDialog(
+private fun OneStiSelectionDialog(
     onDismiss: () -> Unit,
     title: String = "School Year/ Term",
     items: List<String>
@@ -115,7 +114,7 @@ fun OneStiSelectionDialog(
 }
 
 @Composable
-fun OneStiSelectionRowItem(
+private fun OneStiSelectionRowItem(
     modifier: Modifier = Modifier,
     title: String,
     onItemClicked: () -> Unit,

@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import com.example.onestiapp.R
 import com.example.onestiapp.Screens
 import com.example.onestiapp.drawerScreens
-import com.example.onestiapp.ui.CustomDivider
 import com.example.onestiapp.ui.theme.DrawerContentIconColor
 import com.example.onestiapp.ui.theme.DrawerHighlightRowColor
 import com.example.onestiapp.ui.theme.OneStiAppTheme
@@ -63,7 +62,7 @@ fun OneStiDrawerProfile() {
             style = MaterialTheme.typography.caption,
             modifier = Modifier.padding(bottom = 12.dp)
         )
-        CustomDivider()
+        OneStiDivider()
     }
 }
 

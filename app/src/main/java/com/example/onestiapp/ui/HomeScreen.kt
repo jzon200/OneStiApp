@@ -20,6 +20,7 @@ import com.example.onestiapp.data.ClassSchedule
 import com.example.onestiapp.data.getClassSchedule
 import com.example.onestiapp.data.getDate
 import com.example.onestiapp.data.getDay
+import com.example.onestiapp.ui.components.OneStiDivider
 import com.example.onestiapp.ui.theme.*
 
 @Composable
@@ -42,7 +43,7 @@ fun HomeScreen() {
 
 
 @Composable
-fun LatestNewsCard() {
+private fun LatestNewsCard() {
     Card(elevation = 2.dp) {
         Column(
             modifier = Modifier.padding(12.dp),
@@ -67,7 +68,7 @@ fun LatestNewsCard() {
                 )
             }
             Spacer(modifier = Modifier.size(4.dp))
-            CustomDivider()
+            OneStiDivider()
             Spacer(modifier = Modifier.size(12.dp))
             Text(
                 text = "Equipping STI Learners with SAP Business One Skills",
@@ -92,7 +93,7 @@ fun LatestNewsCard() {
 }
 
 @Composable
-fun ClassScheduleCard() {
+private fun ClassScheduleCard() {
     Card(elevation = 2.dp) {
         Column(
             modifier = Modifier.padding(12.dp),
@@ -108,7 +109,7 @@ fun ClassScheduleCard() {
                 style = MaterialTheme.typography.overline
             )
             Spacer(modifier = Modifier.size(6.dp))
-            CustomDivider()
+            OneStiDivider()
             Spacer(modifier = Modifier.size(14.dp))
             // If there's no class schedule, do this
             if (getClassSchedule().isEmpty()) {
@@ -176,7 +177,7 @@ private fun ClassScheduleItem(
 }
 
 @Composable
-fun PaymentScheduleCard() {
+private fun PaymentScheduleCard() {
     Card(elevation = 2.dp) {
         Column(
             modifier = Modifier.padding(12.dp),
@@ -205,7 +206,7 @@ fun PaymentScheduleCard() {
                 style = MaterialTheme.typography.overline
             )
             Spacer(modifier = Modifier.size(6.dp))
-            CustomDivider()
+            OneStiDivider()
             Spacer(modifier = Modifier.size(12.dp))
             Row(Modifier.fillMaxWidth()) {
                 Column {
@@ -259,7 +260,7 @@ fun LatestGradeCard() {
                 )
             }
             Spacer(modifier = Modifier.size(4.dp))
-            CustomDivider()
+            OneStiDivider()
             Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = "JEFFERSON PRADO",
@@ -283,11 +284,6 @@ fun LatestGradeCard() {
             }
         }
     }
-}
-
-@Composable
-fun CustomDivider() {
-    Divider(color = Amber400, thickness = 1.5.dp)
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFEDF1F4)

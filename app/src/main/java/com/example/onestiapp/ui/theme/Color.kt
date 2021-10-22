@@ -22,3 +22,4 @@ val DrawerHighlightRowColor = Color(0xFFF2F2F2)
 
 // Grades Typography/Iconography Color
 val GradesSectionColor = Color(0xFF535252)
+val GrossAssessmentColor = Color(0xFFDADFE1)
