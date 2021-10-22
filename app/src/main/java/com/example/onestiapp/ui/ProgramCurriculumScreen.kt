@@ -170,8 +170,10 @@ private fun TermRow(
                 )
             }
             if (expanded) {
+                // Display Course Subjects
                 subjectItems.forEach { courseSubject ->
                     SubjectColumn(courseSubject = courseSubject)
+                    // last item has no Divider
                     if (courseSubject != subjectItems.last()) {
                         Divider(modifier = Modifier.padding(top = 8.dp))
                     }
@@ -196,29 +198,33 @@ private fun SubjectColumn(
         "In-progress" -> courseSubjectColor[1]
         else -> DrawerContentIconColor
     }
-
-    Row(
+    Column(
         Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)) {
-        Icon(
-            imageVector = statusIcon,
-            contentDescription = statusIcon.name,
-            tint = statusIconTint,
-            modifier = Modifier
-                .size(18.dp)
-                .offset(y = 1.dp)
-        )
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            verticalArrangement = Arrangement.Center
+            .padding(vertical = 4.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
+            Icon(
+                imageVector = statusIcon,
+                contentDescription = statusIcon.name,
+                tint = statusIconTint,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = courseSubject.subjectName,
                 style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
             )
+        }
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp)
+        ) {
             Spacer(modifier = Modifier.height(4.dp))
             // Units
             Text(
