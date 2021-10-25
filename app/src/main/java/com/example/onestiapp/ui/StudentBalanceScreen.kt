@@ -23,24 +23,32 @@ import com.example.onestiapp.ui.components.OneStiSelectionButton
 import com.example.onestiapp.ui.theme.*
 
 @Composable
-fun StudentBalanceScreen() {
+fun StudentBalanceScreen(
+    text: String,
+    items: List<String>,
+    studentBalance: StudentBalance,
+    onItemClicked: (String) -> Unit
+) {
     Column(
         Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        OneStiSelectionButton(
-            text = "2021-2022 First Term",
-            alertDialogTitle = "School Year/Term",
-            items = listOf(
-                "2021-2022 First Term",
-                "2020-2021 Second Term",
-                "2020-2021 First Term",
-                "2019-2020 Second Term",
-                "2019-2020 First Term",
-            )
+        val termsList = listOf(
+            "2021-2022 First Term",
+            "2020-2021 Second Term",
+            "2020-2021 First Term",
+            "2019-2020 Second Term",
+            "2019-2020 First Term",
         )
+        OneStiSelectionButton(
+            text = text,
+            alertDialogTitle = "School Year/Term",
+            items = items
+        ) {
+            onItemClicked(it)
+        }
         Column(
             Modifier
                 .fillMaxSize()
@@ -50,14 +58,14 @@ fun StudentBalanceScreen() {
             AmountBalanceText(
                 text = "Total Balance",
                 style = MaterialTheme.typography.subtitle1,
-                amountBalance = getTotalBalance(StudentBalance.ThirdYearFirstTerm),
+                amountBalance = getTotalBalance(studentBalance = studentBalance),
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Amber400)
                     .padding(vertical = 10.dp, horizontal = 16.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            PaymentScheduleCard(StudentBalance.ThirdYearFirstTerm)
+            PaymentScheduleCard(studentBalance = studentBalance)
             Spacer(modifier = Modifier.height(16.dp))
             GrossAssessmentCard()
             Spacer(modifier = Modifier.height(8.dp))
@@ -227,6 +235,18 @@ private fun AssessmentItems(text: String) {
 @Composable
 fun StudentBalanceScreenPreview() {
     OneStiAppTheme {
-        StudentBalanceScreen()
+        StudentBalanceScreen(
+            text = "2021-2022 First Term",
+            items = listOf(
+                "2021-2022 First Term",
+                "2020-2021 Second Term",
+                "2020-2021 First Term",
+                "2019-2020 Second Term",
+                "2019-2020 First Term",
+            ),
+            studentBalance = StudentBalance.ThirdYearFirstTerm
+        ) {
+
+        }
     }
 }

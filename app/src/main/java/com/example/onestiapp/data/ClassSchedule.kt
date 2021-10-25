@@ -17,7 +17,7 @@ data class ClassSchedule(
 /**
  * Returns the list of Class Schedules [ClassSchedule].
  */
-fun getClassSchedule(): List<ClassSchedule> {
+fun getCurrentClassSchedule(): List<ClassSchedule> {
     val scheduleList = when (getDay()) {
         "Monday" -> mondayScheduleList
         "Tuesday" -> tuesdayScheduleList
@@ -225,3 +225,6 @@ val saturdayScheduleList = listOf(
     ),
 )
 
+val entireWeekScheduleList =
+    mondayScheduleList + tuesdayScheduleList + wednesdayScheduleList +
+            thursdayScheduleList + fridayScheduleList + saturdayScheduleList

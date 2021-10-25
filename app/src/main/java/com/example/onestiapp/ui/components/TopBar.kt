@@ -1,5 +1,6 @@
 package com.example.onestiapp.ui.components
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -14,6 +15,9 @@ import com.example.onestiapp.R
 import com.example.onestiapp.Screens
 import com.google.accompanist.pager.ExperimentalPagerApi
 
+@ExperimentalPagerApi
+@ExperimentalAnimationApi
+@ExperimentalMaterialApi
 @Composable
 fun OneStiTopBar(
     currentScreen: Screens,
@@ -39,7 +43,8 @@ fun OneStiTopBar(
             },
         )
         if (currentScreen == Screens.Grades || currentScreen == Screens.ClassSchedule || currentScreen == Screens.ProgramCurriculum || currentScreen == Screens.StudentBalance) {
-            OneStiTabRow(currentScreen = currentScreen, navController = navController)
+            OneStiTabLayout(currentScreen = currentScreen, navController = navController)
+//            OneStiTabRow(currentScreen = currentScreen, navController = navController)
         }
     }
 }

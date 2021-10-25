@@ -14,17 +14,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.onestiapp.ClassScheduleScreenSample
 import com.example.onestiapp.Screens
+import com.example.onestiapp.StudentBalanceScreenSample
 import com.example.onestiapp.informationScreens
-import com.example.onestiapp.ui.ClassScheduleScreen
-import com.example.onestiapp.ui.GradesScreen
-import com.example.onestiapp.ui.ProgramCurriculumScreen
-import com.example.onestiapp.ui.StudentBalanceScreen
+import com.example.onestiapp.model.OneStiViewModel
+import com.example.onestiapp.ui.*
 import com.example.onestiapp.ui.theme.Amber400
 import com.example.onestiapp.ui.theme.OneStiAppTheme
 import com.google.accompanist.pager.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -86,10 +88,20 @@ fun OneStiTabRow(
 @Composable
 fun OneStiTabLayout(
     currentScreen: Screens,
+    navController: NavController,
+//    onClick: (index: Int) -> Unit
 ) {
     val pagerState = rememberPagerState(informationScreens.size)
     val scope = rememberCoroutineScope()
-
+    val viewModel: OneStiViewModel = viewModel()
+    val selectedTabIndex = when (currentScreen) {
+        Screens.Grades -> 0
+        Screens.ClassSchedule -> 1
+        Screens.ProgramCurriculum -> 2
+        Screens.StudentBalance -> 3
+        else -> 0
+    }
+    var state by remember { mutableStateOf(selectedTabIndex) }
     Column {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
@@ -113,6 +125,10 @@ fun OneStiTabLayout(
                     selected = pagerState.currentPage == index,
                     unselectedContentColor = Color.White,
                     onClick = {
+                        state = index
+                        navController.navigate(tab.route) {
+                            launchSingleTop = true
+                        }
                         scope.launch {
                             pagerState.animateScrollToPage(index)
                         }
@@ -120,23 +136,17 @@ fun OneStiTabLayout(
                 )
             }
         }
-        OneStiHorizontalPager(pagerState = pagerState)
-    }
-}
-
-
-@ExperimentalAnimationApi
-@ExperimentalMaterialApi
-@ExperimentalPagerApi
-@Composable
-private fun OneStiHorizontalPager(pagerState: PagerState) {
-    HorizontalPager(state = pagerState) { page ->
-        when (page) {
-            0 -> GradesScreen()
-            1 -> ClassScheduleScreen()
-            2 -> ProgramCurriculumScreen()
-            3 -> StudentBalanceScreen()
+        HorizontalPager(state = pagerState) { page ->
+            when (page) {
+                0 -> GradesScreen()
+                1 -> ClassScheduleScreenSample(oneStiViewModel = viewModel)
+                2 -> ProgramCurriculumScreen()
+                3 -> StudentBalanceScreenSample(oneStiViewModel = viewModel)
+            }
         }
+//        scope.launch {
+//            pagerState.animateScrollToPage(state)
+//        }
     }
 }
 

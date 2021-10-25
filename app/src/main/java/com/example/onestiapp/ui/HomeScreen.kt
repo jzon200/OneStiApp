@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.onestiapp.R
 import com.example.onestiapp.data.ClassSchedule
-import com.example.onestiapp.data.getClassSchedule
+import com.example.onestiapp.data.getCurrentClassSchedule
 import com.example.onestiapp.data.getDate
 import com.example.onestiapp.data.getDay
 import com.example.onestiapp.ui.components.OneStiDivider
@@ -112,7 +112,7 @@ private fun ClassScheduleCard() {
             OneStiDivider()
             Spacer(modifier = Modifier.size(14.dp))
             // If there's no class schedule, do this
-            if (getClassSchedule().isEmpty()) {
+            if (getCurrentClassSchedule().isEmpty()) {
                 Text(
                     text = "Your schedule is free today.",
                     style = MaterialTheme.typography.caption
@@ -120,7 +120,7 @@ private fun ClassScheduleCard() {
             } else {
                 // Iterates the @Composable ClassScheduleItem
                 // depending on the list of schedules in the current day
-                getClassSchedule().forEachIndexed { index, classSchedule ->
+                getCurrentClassSchedule().forEachIndexed { index, classSchedule ->
                     ClassScheduleItem(
                         schedule = classSchedule,
                         color = courseSubjectColor[index]

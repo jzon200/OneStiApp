@@ -1,5 +1,7 @@
 package com.example.onestiapp.ui.components
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -23,7 +25,8 @@ import com.example.onestiapp.ui.theme.Roboto
 fun OneStiSelectionButton(
     text: String,
     alertDialogTitle: String,
-    items: List<String>
+    items: List<String>,
+    onItemClicked: (String) -> Unit,
 ) {
     // Alert Dialog state set to false
     var openDialog by remember { mutableStateOf(false) }
@@ -69,6 +72,7 @@ fun OneStiSelectionButton(
     // Alert Dialog Condition
     if (openDialog) {
         OneStiSelectionDialog(
+            onItemClicked = { onItemClicked(it) },
             onDismiss = { openDialog = false },
             title = alertDialogTitle,
             items = items
@@ -78,6 +82,7 @@ fun OneStiSelectionButton(
 
 @Composable
 private fun OneStiSelectionDialog(
+    onItemClicked: (String) -> Unit,
     onDismiss: () -> Unit,
     title: String = "School Year/ Term",
     items: List<String>
@@ -94,7 +99,9 @@ private fun OneStiSelectionDialog(
             Column {
                 items.forEach {
                     OneStiSelectionRowItem(title = it) {
-
+                        onItemClicked(it)
+                        Log.d(TAG, "Selected: $it")
+                        onDismiss()
                     }
                 }
             }

@@ -16,9 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.example.onestiapp.R
 import com.example.onestiapp.Screens
 import com.example.onestiapp.drawerScreens
+import com.example.onestiapp.informationScreens
 import com.example.onestiapp.ui.theme.DrawerContentIconColor
 import com.example.onestiapp.ui.theme.DrawerHighlightRowColor
 import com.example.onestiapp.ui.theme.OneStiAppTheme
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
 
 
 @Composable

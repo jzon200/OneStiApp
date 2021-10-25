@@ -38,7 +38,9 @@ fun GradesScreen() {
                 "2019-2020 Second Term",
                 "2019-2020 First Term",
             )
-        )
+        ){
+
+        }
         Spacer(modifier = Modifier.height(16.dp))
         GradesListColumn(secondYearSecondTermGrades)
     }

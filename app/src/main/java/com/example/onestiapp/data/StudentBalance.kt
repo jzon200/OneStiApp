@@ -1,9 +1,6 @@
 package com.example.onestiapp.data
 
 enum class StudentBalance(val paymentScheduleList: List<PaymentSchedule>) {
-    SecondYearSecondTerm(
-        paymentScheduleList = emptyList()
-    ),
     ThirdYearFirstTerm(
         paymentScheduleList = listOf(
             PaymentSchedule(
@@ -23,6 +20,9 @@ enum class StudentBalance(val paymentScheduleList: List<PaymentSchedule>) {
                 amountBalance = 6210.95
             ),
         )
+    ),
+    SecondYearSecondTerm(
+        paymentScheduleList = emptyList()
     ),
 }
 
