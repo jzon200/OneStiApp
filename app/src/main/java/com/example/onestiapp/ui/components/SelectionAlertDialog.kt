@@ -14,7 +14,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.onestiapp.ui.theme.OneStiAppTheme
 import com.example.onestiapp.ui.theme.Roboto
 
 /**
@@ -112,7 +114,7 @@ private fun OneStiSelectionDialog(
         dismissButton = {
             TextButton(onClick = { onDismiss() }) {
                 Text(
-                    "CANCEL",
+                    text = "CANCEL",
                     style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
                 )
             }
@@ -137,5 +139,19 @@ private fun OneStiSelectionRowItem(
             text = title,
             style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground)
         )
+    }
+}
+
+@Preview
+@Composable
+fun PreviewButton() {
+    OneStiAppTheme {
+        OneStiSelectionButton(
+            text = "2021-2022 First Term",
+            items = listOf(),
+            alertDialogTitle = "Title",
+        ) {
+
+        }
     }
 }

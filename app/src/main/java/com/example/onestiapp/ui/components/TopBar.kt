@@ -6,13 +6,15 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.example.onestiapp.R
 import com.example.onestiapp.Screens
+import com.example.onestiapp.ui.theme.Roboto
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 @ExperimentalPagerApi
@@ -22,8 +24,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 fun OneStiTopBar(
     currentScreen: Screens,
     navController: NavController,
-    drawerIcon: ImageVector = Icons.Filled.Menu,
-    onButtonClicked: () -> Unit,
+    onClick: () -> Unit,
 ) {
     Column {
         TopAppBar(
@@ -31,9 +32,9 @@ fun OneStiTopBar(
                 Text(text = currentScreen.title)
             },
             navigationIcon = {
-                IconButton(onClick = { onButtonClicked() }) {
+                IconButton(onClick = { onClick() }) {
                     Icon(
-                        imageVector = drawerIcon,
+                        imageVector = Icons.Filled.Menu,
                         contentDescription = "Nav drawer"
                     )
                 }
@@ -42,9 +43,9 @@ fun OneStiTopBar(
                 ActionsIconItem(currentScreen = currentScreen)
             },
         )
+        // Displays only in Information Tab Screens
         if (currentScreen == Screens.Grades || currentScreen == Screens.ClassSchedule || currentScreen == Screens.ProgramCurriculum || currentScreen == Screens.StudentBalance) {
-            OneStiTabLayout(currentScreen = currentScreen, navController = navController)
-//            OneStiTabRow(currentScreen = currentScreen, navController = navController)
+            OneStiTabRow(navController = navController)
         }
     }
 }
@@ -72,12 +73,61 @@ private fun ActionsIconItem(currentScreen: Screens) {
             )
         }
     } else {
-        IconButton(onClick = { /*TODO*/ }) {
+        var openDialog by remember { mutableStateOf(false) }
+        IconButton(onClick = { openDialog = true }) {
             Icon(
                 imageVector = Icons.Filled.Info,
                 contentDescription = "Info",
                 tint = Color.White
             )
         }
+
+        if (openDialog) {
+            InfoAlertDialog(
+                title = currentScreen.title,
+                text = stringResource(
+                    id = when (currentScreen) {
+                        Screens.Grades -> R.string.grades_info
+                        Screens.ClassSchedule -> R.string.class_schedule_info
+                        Screens.ProgramCurriculum -> R.string.program_curriculum_info
+                        Screens.StudentBalance -> R.string.student_balance_info
+                        else -> R.string.grades_info
+                    }
+                ),
+                onDismiss = {
+                    openDialog = false
+                },
+            )
+        }
     }
+}
+
+@Composable
+fun InfoAlertDialog(title: String, text: String, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        title = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.h6.copy(fontFamily = Roboto)
+            )
+        },
+        text = {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.body2.copy(color = Color.Black)
+            )
+        },
+        confirmButton = {
+            // No Confirm Button
+        },
+        dismissButton = {
+            TextButton(onClick = { onDismiss() }) {
+                Text(
+                    text = "OK",
+                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
+                )
+            }
+        }
+    )
 }

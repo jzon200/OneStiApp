@@ -11,83 +11,35 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.onestiapp.R
 import com.example.onestiapp.Screens
 import com.example.onestiapp.drawerScreens
-import com.example.onestiapp.informationScreens
 import com.example.onestiapp.ui.theme.DrawerContentIconColor
 import com.example.onestiapp.ui.theme.DrawerHighlightRowColor
 import com.example.onestiapp.ui.theme.OneStiAppTheme
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.launch
-
-
-@Composable
-fun OneStiDrawerProfile() {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Spacer(modifier = Modifier.size(16.dp))
-        Image(
-            painter = painterResource(id = R.drawable.profile_pic),
-            contentDescription = "Profile Pic",
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .clip(CircleShape)
-                .size(64.dp)
-        )
-        // Hard-coded yet
-        Text(
-            text = "MY PROFILE",
-            style = MaterialTheme.typography.overline.copy(color = MaterialTheme.colors.primary),
-            modifier = Modifier.padding(
-                top = 8.dp,
-                bottom = 4.dp
-            )
-        )
-        Text(
-            text = "EDZON JAEVE BUBAN BAUSA",
-            style = MaterialTheme.typography.subtitle2,
-        )
-        Text(
-            text = "02000168406",
-            style = MaterialTheme.typography.caption,
-        )
-        Spacer(modifier = Modifier.size(4.dp))
-        Text(
-            text = "BSIT • STI COLLEGE SAN JOSE DEL MONTE",
-            style = MaterialTheme.typography.caption,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-        OneStiDivider()
-    }
-}
+import com.example.onestiapp.ui.theme.Roboto
+import kotlin.system.exitProcess
 
 @Composable
 fun OneStiNavDrawer(
     modifier: Modifier = Modifier,
     rowItems: List<Screens.DrawerScreens> = drawerScreens,
     activeHighlightColor: Color = DrawerHighlightRowColor,
-    initialItemSelectedIndex: Int = 0,
     onDestinationClicked: (route: String) -> Unit,
 ) {
     var selectedItemIndex by remember {
-        mutableStateOf(initialItemSelectedIndex)
+        mutableStateOf(0)
     }
-    val scrollState = rememberScrollState()
     Column(modifier.fillMaxSize()) {
         OneStiDrawerProfile()
         Column(
             modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
+                .verticalScroll(rememberScrollState())
         ) {
             // Returns the Home Drawer Row
             NavDrawerRowItem(
@@ -124,7 +76,7 @@ fun OneStiNavDrawer(
                 color = MaterialTheme.colors.primary,
                 modifier = Modifier.padding(12.dp)
             )
-            for (index in 5 until rowItems.size) {
+            for (index in 5 until rowItems.size - 1) {
                 NavDrawerRowItem(
                     item = rowItems[index],
                     isSelected = index == selectedItemIndex,
@@ -132,6 +84,49 @@ fun OneStiNavDrawer(
                 ) {
                     selectedItemIndex = index
                 }
+            }
+            // Logout
+            var openDialog by remember { mutableStateOf(false) }
+            val onDismiss = { openDialog = false }
+            NavDrawerRowItem(
+                item = rowItems.last(),
+                isSelected = rowItems.indexOf(rowItems.last()) == selectedItemIndex,
+                activeHighlightColor = activeHighlightColor
+            ) {
+                openDialog = true
+            }
+            if (openDialog) {
+                AlertDialog(
+                    onDismissRequest = onDismiss,
+                    title = {
+                        Text(
+                            text = "Confirm",
+                            style = MaterialTheme.typography.h6.copy(fontFamily = Roboto)
+                        )
+                    },
+                    text = {
+                        Text(
+                            text = "Logout now?",
+                            style = MaterialTheme.typography.body2.copy(color = Color.Black)
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(onClick = { exitProcess(-1) }) {
+                            Text(
+                                text = "YES",
+                                style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { onDismiss() }) {
+                            Text(
+                                text = "NO",
+                                style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
+                            )
+                        }
+                    }
+                )
             }
         }
     }
@@ -150,7 +145,7 @@ private fun NavDrawerRowItem(
             .fillMaxWidth()
             .size(48.dp)
             .background(if (isSelected) activeHighlightColor else Color.Transparent)
-            .clickable(enabled = !isSelected) { onItemClicked() },
+            .clickable { onItemClicked() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(modifier = modifier.size(12.dp))
@@ -165,6 +160,54 @@ private fun NavDrawerRowItem(
             text = item.title,
             style = MaterialTheme.typography.button,
         )
+    }
+}
+
+@Composable
+fun OneStiDrawerProfile() {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Spacer(modifier = Modifier.size(16.dp))
+        Image(
+            painter = painterResource(id = R.drawable.profile_pic),
+            contentDescription = "Profile Pic",
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(72.dp)
+        )
+        // Hard-coded yet
+        Text(
+            text = "MY PROFILE",
+            style = MaterialTheme.typography.caption.copy(
+                color = MaterialTheme.colors.primary,
+                fontWeight = FontWeight.Medium
+            ),
+            modifier = Modifier.padding(
+                top = 8.dp,
+                bottom = 4.dp
+            )
+        )
+        Text(
+            text = "EDZON JAEVE BUBAN BAUSA",
+            style = MaterialTheme.typography.subtitle1.copy(fontSize = 16.sp),
+        )
+        Text(
+            text = "02000168406",
+            style = MaterialTheme.typography.body2,
+        )
+        Spacer(modifier = Modifier.size(12.dp))
+        Text(
+            text = "BSIT • STI COLLEGE SAN JOSE DEL MONTE",
+            style = MaterialTheme.typography.body2,
+            modifier = Modifier.padding(bottom = 12.dp)
+        )
+        OneStiDivider()
     }
 }
 
@@ -183,7 +226,7 @@ fun DrawerProfilePreview() {
 fun DrawerPreview() {
     OneStiAppTheme {
         Surface {
-            OneStiNavDrawer() { "" }
+            OneStiNavDrawer {  }
         }
     }
 }

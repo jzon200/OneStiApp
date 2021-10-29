@@ -5,7 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,16 +18,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.onestiapp.R
-import com.example.onestiapp.data.ClassSchedule
-import com.example.onestiapp.data.getCurrentClassSchedule
-import com.example.onestiapp.data.getDate
-import com.example.onestiapp.data.getDay
+import com.example.onestiapp.Screens
+import com.example.onestiapp.data.*
+import com.example.onestiapp.model.MainViewModel
 import com.example.onestiapp.ui.components.OneStiDivider
-import com.example.onestiapp.ui.theme.*
+import com.example.onestiapp.ui.theme.OneStiAppTheme
+import com.example.onestiapp.ui.theme.OpenSans
+import com.example.onestiapp.ui.theme.courseSubjectColor
 
+@ExperimentalMaterialApi
 @Composable
-fun HomeScreen() {
+fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
+    viewModel.setCurrentScreen(Screens.Home)
     Column(
         Modifier
             .fillMaxSize()
@@ -33,11 +41,11 @@ fun HomeScreen() {
     ) {
         LatestNewsCard()
         Spacer(Modifier.height(12.dp))
-        ClassScheduleCard()
+        ClassScheduleCard(navController)
         Spacer(Modifier.height(12.dp))
-        PaymentScheduleCard()
+        PaymentScheduleCard(navController)
         Spacer(Modifier.height(12.dp))
-        LatestGradeCard()
+        LatestGradeCard(navController)
     }
 }
 
@@ -92,9 +100,14 @@ private fun LatestNewsCard() {
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
-private fun ClassScheduleCard() {
-    Card(elevation = 2.dp) {
+private fun ClassScheduleCard(navController: NavController) {
+    Card(elevation = 2.dp, onClick = {
+        navController.navigate(Screens.ClassSchedule.route) {
+            launchSingleTop = true
+        }
+    }) {
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.Center
@@ -176,9 +189,14 @@ private fun ClassScheduleItem(
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
-private fun PaymentScheduleCard() {
-    Card(elevation = 2.dp) {
+private fun PaymentScheduleCard(navController: NavController) {
+    Card(elevation = 2.dp, onClick = {
+        navController.navigate(Screens.StudentBalance.route) {
+            launchSingleTop = true
+        }
+    }) {
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.Center
@@ -208,6 +226,7 @@ private fun PaymentScheduleCard() {
             Spacer(modifier = Modifier.size(6.dp))
             OneStiDivider()
             Spacer(modifier = Modifier.size(12.dp))
+            val latestPaymentSchedule = StudentBalance.ThirdYearFirstTerm.paymentScheduleList[1]
             Row(Modifier.fillMaxWidth()) {
                 Column {
                     Text(
@@ -215,7 +234,7 @@ private fun PaymentScheduleCard() {
                         style = MaterialTheme.typography.body1
                     )
                     Text(
-                        text = "PhP 1,364.80",
+                        text = "PhP ${String.format("%,.2f", latestPaymentSchedule.amountBalance)} ",
                         style = MaterialTheme.typography.subtitle1
                     )
                 }
@@ -226,7 +245,7 @@ private fun PaymentScheduleCard() {
                         style = MaterialTheme.typography.body2
                     )
                     Text(
-                        text = "08 Oct, 2021",
+                        text = latestPaymentSchedule.scheduleDate,
                         style = MaterialTheme.typography.subtitle1
                     )
                 }
@@ -235,9 +254,14 @@ private fun PaymentScheduleCard() {
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
-fun LatestGradeCard() {
-    Card(elevation = 2.dp) {
+fun LatestGradeCard(navController: NavController) {
+    Card(elevation = 2.dp, onClick = {
+        navController.navigate(Screens.Grades.route) {
+            launchSingleTop = true
+        }
+    }) {
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.Center
@@ -262,35 +286,51 @@ fun LatestGradeCard() {
             Spacer(modifier = Modifier.size(4.dp))
             OneStiDivider()
             Spacer(modifier = Modifier.size(8.dp))
-            Text(
-                text = "JEFFERSON PRADO",
-                style = MaterialTheme.typography.caption
-            )
+            val latestGrade = GradesPerTerm.ThirdYearFirstTerm.gradesList[7]
             Row(
                 Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Data Structures & Algorithms",
-                    style = MaterialTheme.typography.body2
-                )
-                Text(
-                    text = "100.00",
-                    style = MaterialTheme.typography.body2.copy(
-                        color = MaterialTheme.colors.primary,
-                        fontWeight = FontWeight.Medium
-                    ),
-                )
+                Column {
+                    Text(
+                        text = latestGrade.instructorName.uppercase(),
+                        style = MaterialTheme.typography.overline,
+                    )
+                    Text(
+                        text = latestGrade.subjectName,
+                        style = MaterialTheme.typography.body1.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        modifier = Modifier.widthIn(max = 250.dp)
+                    )
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "PRELIM",
+                        style = MaterialTheme.typography.overline.copy(
+                            color = MaterialTheme.colors.primary,
+                            fontWeight = FontWeight.Medium
+                        ),
+                    )
+                    Text(
+                        text = String.format("%.2f", latestGrade.gradesEveryPeriodList.first()),
+                        style = MaterialTheme.typography.body1.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                    )
+                }
             }
         }
     }
 }
 
+@ExperimentalMaterialApi
 @Preview(showBackground = true, backgroundColor = 0xFFEDF1F4)
 @Composable
 fun HomeScreenPreview() {
     OneStiAppTheme {
-        HomeScreen()
+        HomeScreen(MainViewModel(), navController = rememberNavController())
     }
 }
 

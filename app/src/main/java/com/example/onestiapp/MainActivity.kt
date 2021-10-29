@@ -1,8 +1,6 @@
 package com.example.onestiapp
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -19,11 +17,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.onestiapp.data.ClassSchedule
-import com.example.onestiapp.data.StudentBalance
-import com.example.onestiapp.model.OneStiViewModel
+import com.example.onestiapp.model.MainViewModel
 import com.example.onestiapp.ui.*
 import com.example.onestiapp.ui.components.OneStiNavDrawer
 import com.example.onestiapp.ui.components.OneStiTopBar
@@ -35,88 +30,15 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @ExperimentalPagerApi
 class MainActivity : ComponentActivity() {
-//    private val viewModel by viewModels<OneStiViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             OneStiAppTheme {
                 OneStiApp()
-//                StudentBalanceScreenSample(viewModel)
-//                ClassScheduleScreenSample(viewModel)
             }
         }
     }
 }
-
-@Composable
-fun ClassScheduleScreenSample(oneStiViewModel: OneStiViewModel) {
-//    val items: List<PaymentSchedule> by viewModel.paymentScheduleItems.observeAsState(listOf())
-    val termList = listOf(
-        "2021-2022 First Term",
-        "2020-2021 Second Term",
-        "2020-2021 First Term",
-        "2019-2020 Second Term",
-        "2019-2020 First Term",
-    )
-    val text by oneStiViewModel.classScheduleText.observeAsState("")
-    val items: List<ClassSchedule> by oneStiViewModel.classScheduleItems.observeAsState(listOf())
-    ClassScheduleScreen(
-        text = text,
-        items = listOf(
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday",
-            "Entire Week",
-        ),
-        schedules = items,
-        onItemClicked = {
-            oneStiViewModel.apply {
-                onTextChanged2(it)
-                getClassSchedule(it)
-            }
-        }
-    )
-}
-
-@Composable
-fun StudentBalanceScreenSample(oneStiViewModel: OneStiViewModel) {
-//    val items: List<PaymentSchedule> by viewModel.paymentScheduleItems.observeAsState(listOf())
-    val termList = listOf(
-        "2021-2022 First Term",
-        "2020-2021 Second Term",
-        "2020-2021 First Term",
-        "2019-2020 Second Term",
-        "2019-2020 First Term",
-    )
-    val text by oneStiViewModel.yearText.observeAsState(termList.first())
-    val studentBalance by oneStiViewModel.studentBalance.observeAsState(StudentBalance.ThirdYearFirstTerm)
-    StudentBalanceScreen(
-        text = text,
-        studentBalance = studentBalance,
-        items = listOf(
-            "2021-2022 First Term",
-            "2020-2021 Second Term",
-            "2020-2021 First Term",
-            "2019-2020 Second Term",
-            "2019-2020 First Term",
-        ),
-        onItemClicked = {
-            oneStiViewModel.apply {
-                onYearTextChanged(it)
-                when(it){
-                    termList[0] -> onStudentBalanceChanged(StudentBalance.ThirdYearFirstTerm)
-                    termList[1] -> onStudentBalanceChanged(StudentBalance.SecondYearSecondTerm)
-                    else -> onStudentBalanceChanged(StudentBalance.SecondYearSecondTerm)
-                }
-            }
-        }
-    )
-}
-
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @ExperimentalPagerApi
@@ -124,21 +46,20 @@ fun StudentBalanceScreenSample(oneStiViewModel: OneStiViewModel) {
 fun OneStiApp() {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
-    val backstackEntry = navController.currentBackStackEntryAsState()
-    val currentScreen = Screens.fromRoute(backstackEntry.value?.destination?.route)
-    val viewModel: OneStiViewModel = viewModel()
+    val coroutineScope = rememberCoroutineScope()
+    val viewModel: MainViewModel = viewModel()
+    val currentScreen by viewModel.currentScreen.observeAsState(Screens.Home)
+
     Scaffold(
         topBar = {
             OneStiTopBar(
                 currentScreen = currentScreen,
                 navController = navController,
-                onButtonClicked = {
+                onClick = {
                     // Opens NavDrawer
-                    scope.launch {
+                    coroutineScope.launch {
                         scaffoldState.drawerState.open()
                     }
-                    Log.d(TAG, "OneStiAppTopBar: $currentScreen")
                 }
             )
 
@@ -148,20 +69,24 @@ fun OneStiApp() {
             OneStiNavDrawer(
                 onDestinationClicked = { route ->
                     // Close NavDrawer
-                    scope.launch {
+                    coroutineScope.launch {
                         scaffoldState.drawerState.close()
                     }
+                    // Navigates on the selected route in the NavDrawer
                     navController.navigate(route) {
-                        popUpTo = navController.graph.startDestinationId
+                        popUpTo(route = Screens.Home.route)
                         launchSingleTop = true
-                        Log.d(TAG, "OneStiAppDrawer: $currentScreen")
                     }
                 },
             )
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
     ) { innerPadding ->
-        OneStiNavHost(modifier = Modifier.padding(innerPadding), navController = navController, viewModel = viewModel)
+        OneStiNavHost(
+            modifier = Modifier.padding(innerPadding),
+            navController = navController,
+            viewModel = viewModel
+        )
     }
 }
 
@@ -169,26 +94,30 @@ fun OneStiApp() {
 @ExperimentalMaterialApi
 @ExperimentalPagerApi
 @Composable
-fun OneStiNavHost(modifier: Modifier = Modifier, navController: NavHostController, viewModel: OneStiViewModel) {
+fun OneStiNavHost(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    viewModel: MainViewModel
+) {
     NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = Screens.Home.route
     ) {
         composable(route = Screens.Home.route) {
-            HomeScreen()
+            HomeScreen(viewModel = viewModel, navController = navController)
         }
         composable(route = Screens.Grades.route) {
-            GradesScreen()
+            GradesScreen(viewModel = viewModel)
         }
         composable(route = Screens.ClassSchedule.route) {
-            ClassScheduleScreenSample(viewModel)
+            ClassScheduleScreen(viewModel = viewModel)
         }
         composable(route = Screens.ProgramCurriculum.route) {
-            ProgramCurriculumScreen()
+            ProgramCurriculumScreen(viewModel = viewModel)
         }
         composable(route = Screens.StudentBalance.route) {
-            StudentBalanceScreenSample(viewModel)
+            StudentBalanceScreen(viewModel = viewModel)
         }
     }
 }

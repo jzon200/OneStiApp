@@ -8,6 +8,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,7 +18,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.onestiapp.data.*
+import com.example.onestiapp.Screens
+import com.example.onestiapp.data.ClassSchedule
+import com.example.onestiapp.data.entireWeekScheduleList
+import com.example.onestiapp.model.MainViewModel
 import com.example.onestiapp.ui.components.OneStiSelectionButton
 import com.example.onestiapp.ui.theme.OneStiAppTheme
 import com.example.onestiapp.ui.theme.Roboto
@@ -24,11 +29,13 @@ import com.example.onestiapp.ui.theme.courseSubjectColor
 
 @Composable
 fun ClassScheduleScreen(
-    text: String,
-    items: List<String>,
-    schedules: List<ClassSchedule>,
-    onItemClicked: (String) -> Unit
+    viewModel: MainViewModel,
 ) {
+    viewModel.setCurrentScreen(Screens.ClassSchedule)
+    val text by viewModel.classScheduleTextButton.observeAsState("Entire Week")
+    val schedules: List<ClassSchedule> by viewModel.classScheduleItems.observeAsState(
+        entireWeekScheduleList
+    )
     Column(
         Modifier
             .fillMaxSize()
@@ -36,15 +43,23 @@ fun ClassScheduleScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OneStiSelectionButton(
-//            text = "Today | ${getDay()}",
             text = text,
             alertDialogTitle = "Class Days",
-            items = items
-        ) {
-            onItemClicked(it)
-        }
+            items = listOf(
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday",
+                "Entire Week",
+            ),
+            onItemClicked = {
+                viewModel.onClassScheduleSelected(it)
+            }
+        )
         Spacer(modifier = Modifier.height(16.dp))
-//        ClassScheduleListColumn(entireWeekScheduleList)
         // If there's no class schedule, do this
         if (schedules.isEmpty()) {
             Text(
@@ -65,7 +80,9 @@ fun ClassScheduleListColumn(schedules: List<ClassSchedule>) {
         items(schedules) { classSchedule ->
             ClassScheduleItem(
                 schedule = classSchedule,
-                color = courseSubjectColor[schedules.indexOf(classSchedule)]
+                color = courseSubjectColor[schedules.indexOf(classSchedule)],
+                // will only display the Day Indicator in Entire Week
+                dayIndicator = if (schedules != entireWeekScheduleList) null else classSchedule.dayIndicator
             )
             Spacer(modifier = Modifier.height(18.dp))
         }
@@ -75,7 +92,8 @@ fun ClassScheduleListColumn(schedules: List<ClassSchedule>) {
 @Composable
 private fun ClassScheduleItem(
     schedule: ClassSchedule,
-    color: Color
+    color: Color,
+    dayIndicator: String?
 ) {
     Row(
         Modifier.fillMaxWidth(),
@@ -83,8 +101,15 @@ private fun ClassScheduleItem(
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         Column(
-            Modifier.wrapContentWidth(), horizontalAlignment = Alignment.CenterHorizontally
+            Modifier.wrapContentWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            if (dayIndicator != null) {
+                Text(
+                    text = dayIndicator.uppercase(),
+                    style = MaterialTheme.typography.overline
+                )
+            }
             Text(
                 text = schedule.classStart,
                 style = MaterialTheme.typography.subtitle1.copy(
@@ -102,7 +127,8 @@ private fun ClassScheduleItem(
             modifier = Modifier
                 .clip(RoundedCornerShape(6.dp))
                 .background(color)
-                .width(210.dp)
+                .width(200.dp)
+                .heightIn(72.dp)
                 .wrapContentHeight()
         ) {
             Column(
@@ -136,6 +162,6 @@ private fun ClassScheduleItem(
 @Composable
 fun ClassScheduleScreenPreview() {
     OneStiAppTheme {
-//        ClassScheduleScreen()
+        ClassScheduleScreen(viewModel = MainViewModel())
     }
 }

@@ -6,16 +6,47 @@ data class Grade(
     val subjectName: String,
     val instructorName: String,
     val gradesEveryPeriodList: List<Double?>,
-    val uploadDate: String
+    val uploadDate: String,
+    val units: Double = 3.00,
+    val isNonCreditCourse: Boolean = false
 )
+
+/**
+ * Returns the Calculated GWA (General Weighted Average)
+ * in STI Grading System as follows:
+ * CPC = CG x Un,
+ * TCP = CPC1 + CPC2 + CPC3 + ... + CPCn,
+ * GWA = TCP / TUn
+ * Note: If the Course Grades are not yet completed returns null
+ */
+fun getGWA(grades: List<Grade>): Double? {
+    var totalCreditPoints = 0.00 // TCP
+    var totalUnits = 0.00 // TUn
+    val hasNoCourseGrade = mutableListOf<Boolean>()
+    grades.forEach { grade ->
+        if (!grade.isNonCreditCourse) {
+            val courseGrade = getCourseGrade(grade.gradesEveryPeriodList)
+            if (courseGrade != null) {
+                val creditsPerCourse = courseGrade * grade.units
+                totalCreditPoints += creditsPerCourse
+                totalUnits += grade.units
+                hasNoCourseGrade.add(false)
+            } else {
+                hasNoCourseGrade.add(true)
+            }
+        }
+    }
+    return if (!hasNoCourseGrade.contains(true)) totalCreditPoints / totalUnits else null
+}
+
 
 /**
  * returns the Calculated Course Grade of a Subject in STI Grading System.
  * (Prelims-PreFinals) = 20%,
  * (Finals) = 40%
- * else returns "" if the grade is still not complete.
+ * else returns nulls if the grade is still not complete.
  */
-fun getCourseGrade(gradesList: List<Double?>): String {
+fun getCourseGrade(gradesList: List<Double?>): Double? {
     var courseScore = 0.00
     if (!gradesList.contains(null)) {
         for (index in 0 until 3) {
@@ -35,67 +66,9 @@ fun getCourseGrade(gradesList: List<Double?>): String {
             in 74.50..76.49 -> 3.00
             else -> 5.00
         }
-        return String.format("%.2f", courseGrade)
+        return courseGrade
     } else {
-        return ""
+        return null
     }
 }
 
-
-val secondYearSecondTermGrades = listOf(
-    Grade(
-        subjectName = "Enterprise Architecture",
-        instructorName = "MARK JAYSON SANTOS",
-        gradesEveryPeriodList = listOf(97.54, 98.87, 96.38, 96.11),
-        uploadDate = "06 JUL, 2021"
-    ),
-    Grade(
-        subjectName = "Network Technology 1",
-        instructorName = "JEFFERSON PRADO",
-        gradesEveryPeriodList = listOf(99.73, 95.59, 99.13, 98.46),
-        uploadDate = "06 JUL, 2021"
-    ),
-    Grade(
-        subjectName = "Systems Integration and Architecture",
-        instructorName = "JEFFERSON PRADO",
-        gradesEveryPeriodList = listOf(94.96, 98.04, 97.12, 95.60),
-        uploadDate = "06 JUL, 2021"
-    ),
-    Grade(
-        subjectName = "Information Management",
-        instructorName = "HERBERT GARDNER",
-        gradesEveryPeriodList = listOf(95.42, 98.50, 97.13, 98.35),
-        uploadDate = "01 JUL, 2021"
-    ),
-    Grade(
-        subjectName = "Physical Education 3 (Individual & Dual Sports)",
-        instructorName = "VENJAMIN PAUL LAGRIMAS",
-        gradesEveryPeriodList = listOf(94.17, 92.77, 93.94, 98.95),
-        uploadDate = "01 JUL, 2021"
-    ),
-    Grade(
-        subjectName = "Technopreneurship",
-        instructorName = "RONALD DURON",
-        gradesEveryPeriodList = listOf(95.36, 97.70, 89.98, 93.10),
-        uploadDate = "01 JUL, 2021"
-    ),
-    Grade(
-        subjectName = "Great Books",
-        instructorName = "JESSICA DE LA TORRE",
-        gradesEveryPeriodList = listOf(97.15, 96.89, 95.75, 95.71),
-        uploadDate = "30 JUN, 2021"
-    ),
-    Grade(
-        subjectName = "Purposive Communication 2",
-        instructorName = "HANIEL LOU MORALES",
-        gradesEveryPeriodList = listOf(84.77, 98.14, 97.87, 100.00),
-        uploadDate = "30 JUN, 2021"
-    ),
-    Grade(
-        subjectName = "Quantitative Methods",
-        instructorName = "GENALYN GUIANG ",
-        gradesEveryPeriodList = listOf(93.00, 90.16, 89.54, 94.70),
-        uploadDate = "30 JUN, 2021"
-    ),
-
-)

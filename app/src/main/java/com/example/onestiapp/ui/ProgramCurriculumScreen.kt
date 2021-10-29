@@ -25,9 +25,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.onestiapp.Screens
 import com.example.onestiapp.data.CourseSubject
 import com.example.onestiapp.data.ProgramCurriculum
 import com.example.onestiapp.data.getDate
+import com.example.onestiapp.model.MainViewModel
 import com.example.onestiapp.ui.components.OneStiDivider
 import com.example.onestiapp.ui.theme.DrawerContentIconColor
 import com.example.onestiapp.ui.theme.OneStiAppTheme
@@ -37,7 +39,10 @@ import com.example.onestiapp.ui.theme.courseSubjectColor
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable
-fun ProgramCurriculumScreen() {
+fun ProgramCurriculumScreen(
+    viewModel: MainViewModel
+) {
+    viewModel.setCurrentScreen(Screens.ProgramCurriculum)
     val programCurriculum = ProgramCurriculum.values().toList()
     Column(
         modifier = Modifier
@@ -53,7 +58,7 @@ fun ProgramCurriculumScreen() {
         )
         ProgramCurriculumIndicatorIcons()
         programCurriculum.forEach {
-            YearCurriculumCard(
+            ITCurriculumCard(
                 programCurriculum = it
             )
         }
@@ -63,11 +68,10 @@ fun ProgramCurriculumScreen() {
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
-private fun YearCurriculumCard(
-    programCurriculum: ProgramCurriculum,
-) {
+private fun ITCurriculumCard(programCurriculum: ProgramCurriculum) {
     var expandedState by remember { mutableStateOf(false) } // First Term
     var expandedState2 by remember { mutableStateOf(false) } // Second Term
+    var expandedState3 by remember { mutableStateOf(false) } // Elective Course (Optional)
     val rotateIcon by animateFloatAsState(if (expandedState || expandedState2) 180f else 0f)
     Card(elevation = 2.dp) {
         Column(
@@ -90,25 +94,26 @@ private fun YearCurriculumCard(
                     contentDescription = Icons.Default.Launch.name,
                     tint = MaterialTheme.colors.primary,
                     modifier = Modifier
-                        .size(18.dp)
+                        .size(22.dp)
                         .rotate(rotateIcon)
                         .clickable {
-                            if (!expandedState && !expandedState2) {
+                            if (!expandedState && !expandedState2 && !expandedState3) {
                                 expandedState = true
                                 expandedState2 = true
-                            } else if (expandedState || expandedState2) {
+                                expandedState3 = true
+                            } else if (expandedState || expandedState2 || expandedState3) {
                                 expandedState = false
                                 expandedState2 = false
+                                expandedState3 = false
                             }
                         }
                 )
             }
-            Spacer(modifier = Modifier.height(10.dp))
-            OneStiDivider()
+            OneStiDivider(modifier = Modifier.padding(vertical = 10.dp))
+            val isElectiveCourse = programCurriculum == ProgramCurriculum.ElectiveCourses
             // First Term
-            Spacer(modifier = Modifier.height(10.dp))
             TermRow(
-                term = "First Term",
+                title = if (isElectiveCourse) "Elective Courses" else "First Term",
                 subjectItems = programCurriculum.firstTermSubjects,
                 expanded = expandedState
             ) {
@@ -117,11 +122,22 @@ private fun YearCurriculumCard(
             // Second Term
             Spacer(modifier = Modifier.height(10.dp))
             TermRow(
-                term = "Second Term",
+                title = if (isElectiveCourse) "Elective Courses" else "Second Term",
                 subjectItems = programCurriculum.secondTermSubjects,
                 expanded = expandedState2
             ) {
                 expandedState2 = !expandedState2
+            }
+            if (isElectiveCourse) {
+                // Elective Course (Optional)
+                Spacer(modifier = Modifier.height(10.dp))
+                TermRow(
+                    title = "Elective Courses",
+                    subjectItems = programCurriculum.electiveCourses,
+                    expanded = expandedState3
+                ) {
+                    expandedState3 = !expandedState3
+                }
             }
         }
     }
@@ -132,8 +148,8 @@ private fun YearCurriculumCard(
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable
-private fun TermRow(
-    term: String,
+fun TermRow(
+    title: String,
     subjectItems: List<CourseSubject>,
     expanded: Boolean,
     onClick: () -> Unit
@@ -141,7 +157,9 @@ private fun TermRow(
     val rotateIcon by animateFloatAsState(if (expanded) 180f else 0f)
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        onClick = onClick
+        onClick = {
+            onClick()
+        }
     ) {
         Column(
             modifier = Modifier
@@ -162,7 +180,7 @@ private fun TermRow(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = " $term",
+                    text = " $title",
                     style = MaterialTheme.typography.body1.copy(
                         color = MaterialTheme.colors.primary,
                         fontWeight = FontWeight.Medium,
@@ -398,6 +416,6 @@ private fun ProgramCurriculumCard(
 @Composable
 fun ProgramCurriculumPreview() {
     OneStiAppTheme {
-        ProgramCurriculumScreen()
+        ProgramCurriculumScreen(viewModel = MainViewModel())
     }
 }

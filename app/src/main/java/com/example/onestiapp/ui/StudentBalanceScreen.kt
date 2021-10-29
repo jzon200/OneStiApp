@@ -4,10 +4,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -15,39 +20,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.onestiapp.data.PaymentSchedule
-import com.example.onestiapp.data.StudentBalance
-import com.example.onestiapp.data.getTotalBalance
+import com.example.onestiapp.Screens
+import com.example.onestiapp.data.*
+import com.example.onestiapp.model.MainViewModel
 import com.example.onestiapp.ui.components.OneStiDivider
 import com.example.onestiapp.ui.components.OneStiSelectionButton
-import com.example.onestiapp.ui.theme.*
+import com.example.onestiapp.ui.theme.Amber400
+import com.example.onestiapp.ui.theme.GrossAssessmentColor
+import com.example.onestiapp.ui.theme.LightBlue900
+import com.example.onestiapp.ui.theme.OneStiAppTheme
 
 @Composable
 fun StudentBalanceScreen(
-    text: String,
-    items: List<String>,
-    studentBalance: StudentBalance,
-    onItemClicked: (String) -> Unit
+    viewModel: MainViewModel,
 ) {
+    viewModel.setCurrentScreen(Screens.StudentBalance)
+    val text by viewModel.studentBalanceTextButton.observeAsState("2021-2022 First Term")
+    val studentBalance by viewModel.studentBalance.observeAsState(StudentBalance.ThirdYearFirstTerm)
     Column(
         Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val termsList = listOf(
-            "2021-2022 First Term",
-            "2020-2021 Second Term",
-            "2020-2021 First Term",
-            "2019-2020 Second Term",
-            "2019-2020 First Term",
-        )
         OneStiSelectionButton(
             text = text,
             alertDialogTitle = "School Year/Term",
-            items = items
+            items = listOf(
+                "2021-2022 First Term",
+                "2020-2021 Second Term",
+                "2020-2021 First Term",
+                "2019-2020 Second Term",
+                "2019-2020 First Term",
+            ),
         ) {
-            onItemClicked(it)
+            viewModel.onStudentBalanceTermSelected(it)
         }
         Column(
             Modifier
@@ -67,7 +74,7 @@ fun StudentBalanceScreen(
             Spacer(modifier = Modifier.height(16.dp))
             PaymentScheduleCard(studentBalance = studentBalance)
             Spacer(modifier = Modifier.height(16.dp))
-            GrossAssessmentCard()
+            GrossAssessmentCard(studentBalance = studentBalance)
             Spacer(modifier = Modifier.height(8.dp))
             AmountBalanceText(
                 text = "Total Payments and Adjustments",
@@ -159,7 +166,7 @@ private fun PaymentScheduleItems(paymentSchedule: PaymentSchedule) {
 }
 
 @Composable
-private fun GrossAssessmentCard() {
+private fun GrossAssessmentCard(studentBalance: StudentBalance) {
     Card(
         elevation = 2.dp
     ) {
@@ -177,15 +184,14 @@ private fun GrossAssessmentCard() {
                     style = MaterialTheme.typography.subtitle1
                 )
                 Text(
-                    text = "PhP 0.00",
+                    text = "PhP ${String.format("%,.2f", getGrossAssessment(studentBalance = studentBalance))}",
                     style = MaterialTheme.typography.subtitle1
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
             OneStiDivider(Modifier.padding(vertical = 6.dp))
-            val items = listOf("Tuition Fee", "Other School Fees", "Miscellaneous Fees")
-            items.forEach {
-                AssessmentItems(text = it)
+            studentBalance.grossAssessmentList.forEach {
+                AssessmentItems(grossAssessment = it)
             }
             Spacer(modifier = Modifier.height(24.dp))
             Text(
@@ -199,7 +205,7 @@ private fun GrossAssessmentCard() {
 }
 
 @Composable
-private fun AssessmentItems(text: String) {
+private fun AssessmentItems(grossAssessment: GrossAssessment) {
     Spacer(modifier = Modifier.height(8.dp))
     Row(
         Modifier
@@ -219,12 +225,12 @@ private fun AssessmentItems(text: String) {
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
-                text = text,
+                text = grossAssessment.feeLabel,
                 style = MaterialTheme.typography.subtitle2
             )
         }
         Text(
-            text = "PhP 0.00",
+            text = "PhP ${String.format("%,.2f", grossAssessment.amountBalance)}",
             style = MaterialTheme.typography.subtitle2
         )
     }
@@ -235,18 +241,6 @@ private fun AssessmentItems(text: String) {
 @Composable
 fun StudentBalanceScreenPreview() {
     OneStiAppTheme {
-        StudentBalanceScreen(
-            text = "2021-2022 First Term",
-            items = listOf(
-                "2021-2022 First Term",
-                "2020-2021 Second Term",
-                "2020-2021 First Term",
-                "2019-2020 Second Term",
-                "2019-2020 First Term",
-            ),
-            studentBalance = StudentBalance.ThirdYearFirstTerm
-        ) {
-
-        }
+        StudentBalanceScreen(viewModel = MainViewModel())
     }
 }

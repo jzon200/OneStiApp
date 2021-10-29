@@ -6,7 +6,8 @@ package com.example.onestiapp.data
 enum class ProgramCurriculum(
     val title: String,
     val firstTermSubjects: List<CourseSubject>,
-    val secondTermSubjects: List<CourseSubject>
+    val secondTermSubjects: List<CourseSubject>,
+    val electiveCourses: List<CourseSubject> = emptyList(),
 ) {
     FirstYear(
         title = "First Year",
@@ -386,8 +387,7 @@ enum class ProgramCurriculum(
                 status = "In-progress",
                 preRequisite = "Introduction to Computing"
             ),
-
-            ),
+        ),
         secondTermSubjects = listOf(
             CourseSubject(
                 subjectName = "Information Assurance and Security (Data Privacy)",
@@ -442,8 +442,7 @@ enum class ProgramCurriculum(
                 status = "Not Taken",
                 preRequisite = "Systems Integration & Arch"
             ),
-
-            )
+        )
     ),
     FourthYear(
         title = "Fourth Year",
@@ -500,8 +499,7 @@ enum class ProgramCurriculum(
                 termTaken = null,
                 status = "Not Taken",
             ),
-
-            ),
+        ),
         secondTermSubjects = listOf(
             CourseSubject(
                 subjectName = "IT Practicum (486 hours)",
@@ -510,6 +508,123 @@ enum class ProgramCurriculum(
                 grade = null,
                 termTaken = null,
                 status = "Not Taken",
+            ),
+        )
+    ),
+    ElectiveCourses(
+        title = "Elective Courses",
+        firstTermSubjects = listOf(
+            CourseSubject(
+                subjectName = "Object-Oriented Programming",
+                unitsRequired = 3.00,
+                unitsTaken = 3.00,
+                grade = "1.00",
+                termTaken = 2001,
+                status = "Taken",
+                preRequisite = "Computer Programming 2"
+            ),
+            CourseSubject(
+                subjectName = "Enterprise Architecture",
+                unitsRequired = 3.00,
+                unitsTaken = 3.00,
+                grade = "1.25",
+                termTaken = 2002,
+                status = "Taken",
+                preRequisite = "Object-Oriented Programming"
+            ),
+            CourseSubject(
+                subjectName = "Programming Languages",
+                unitsRequired = 3.00,
+                unitsTaken = 3.00,
+                grade = null,
+                termTaken = 2101,
+                status = "In-progress",
+                preRequisite = "Enterprise Architecture"
+            ),
+            CourseSubject(
+                subjectName = "Game Development",
+                unitsRequired = 3.00,
+                unitsTaken = null,
+                grade = null,
+                termTaken = null,
+                status = "Not Taken",
+                preRequisite = "Enterprise Architecture"
+            ),
+        ),
+        secondTermSubjects = listOf(
+            CourseSubject(
+                subjectName = "Introduction to Digital Graphics Design",
+                unitsRequired = 3.00,
+                unitsTaken = null,
+                grade = null,
+                termTaken = null,
+                status = "Not Taken",
+                preRequisite = "Computer Programming 2"
+            ),
+            CourseSubject(
+                subjectName = "Introduction to Computer Animation",
+                unitsRequired = 3.00,
+                unitsTaken = null,
+                grade = null,
+                termTaken = null,
+                status = "Not Taken",
+                preRequisite = "Intro to Digital Graphics Des"
+            ),
+            CourseSubject(
+                subjectName = "Advanced Digital Graphics Design",
+                unitsRequired = 3.00,
+                unitsTaken = null,
+                grade = null,
+                termTaken = null,
+                status = "Not Taken",
+                preRequisite = "Intro to Computer Animation"
+            ),
+            CourseSubject(
+                subjectName = "Advanced Computer Animation",
+                unitsRequired = 3.00,
+                unitsTaken = null,
+                grade = null,
+                termTaken = null,
+                status = "Not Taken",
+                preRequisite = "Advanced Dig Graphics Design"
+            ),
+        ),
+        electiveCourses = listOf(
+            CourseSubject(
+                subjectName = "Computer Systems Architecture",
+                unitsRequired = 3.00,
+                unitsTaken = null,
+                grade = null,
+                termTaken = null,
+                status = "Not Taken",
+                preRequisite = "Computer Programming 2"
+            ),
+            CourseSubject(
+                subjectName = "Robot Dynamics Fundamentals",
+                unitsRequired = 3.00,
+                unitsTaken = null,
+                grade = null,
+                termTaken = null,
+                status = "Not Taken",
+                preRequisite = "Computer Systems Architecture"
+            ),
+            CourseSubject(
+                subjectName = "Intermediate Human-Computer Interaction",
+                unitsRequired = 3.00,
+                unitsTaken = null,
+                grade = null,
+                termTaken = null,
+                status = "Not Taken",
+                preRequisite = "Robot Dynamics Fundamentals"
+            ),
+            CourseSubject(
+                subjectName = "Robot Assembly and Programming",
+                unitsRequired = 3.00,
+                unitsTaken = null,
+                grade = null,
+                termTaken = null,
+                status = "Not Taken",
+                preRequisite = "Inter Human-Comp Interaction"
             ),
         )
     ),
