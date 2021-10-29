@@ -5,48 +5,54 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.onestiapp.R
-import com.example.onestiapp.data.ClassSchedule
-import com.example.onestiapp.data.getClassSchedule
-import com.example.onestiapp.data.getDate
-import com.example.onestiapp.data.getDay
-import com.example.onestiapp.ui.theme.DividerColor
-import com.example.onestiapp.ui.theme.PrimaryColor
+import com.example.onestiapp.Screens
+import com.example.onestiapp.data.*
+import com.example.onestiapp.model.MainViewModel
+import com.example.onestiapp.ui.components.OneStiDivider
+import com.example.onestiapp.ui.theme.OneStiAppTheme
+import com.example.onestiapp.ui.theme.OpenSans
 import com.example.onestiapp.ui.theme.courseSubjectColor
 
+@ExperimentalMaterialApi
 @Composable
-fun HomeScreen() {
-    Surface(modifier = Modifier.fillMaxSize()) {
-        val scrollState = rememberScrollState()
-        Column(
-            Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(10.dp)
-        ) {
-            LatestNewsCard()
-            Spacer(Modifier.size(12.dp))
-            ClassScheduleCard()
-            Spacer(Modifier.size(12.dp))
-            PaymentScheduleCard()
-            Spacer(Modifier.size(12.dp))
-            LatestGradeCard()
-        }
+fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
+    viewModel.setCurrentScreen(Screens.Home)
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(10.dp)
+    ) {
+        LatestNewsCard()
+        Spacer(Modifier.height(12.dp))
+        ClassScheduleCard(navController)
+        Spacer(Modifier.height(12.dp))
+        PaymentScheduleCard(navController)
+        Spacer(Modifier.height(12.dp))
+        LatestGradeCard(navController)
     }
 }
 
 
 @Composable
-fun LatestNewsCard() {
-    Card(elevation = 4.dp) {
+private fun LatestNewsCard() {
+    Card(elevation = 2.dp) {
         Column(
             modifier = Modifier.padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -63,12 +69,14 @@ fun LatestNewsCard() {
                 )
                 Text(
                     text = "MORE NEWS",
-                    style = MaterialTheme.typography.overline,
-                    color = PrimaryColor
+                    style = MaterialTheme.typography.overline.copy(
+                        color = MaterialTheme.colors.primary,
+                        fontWeight = FontWeight.Medium
+                    ),
                 )
             }
             Spacer(modifier = Modifier.size(4.dp))
-            CustomDivider()
+            OneStiDivider()
             Spacer(modifier = Modifier.size(12.dp))
             Text(
                 text = "Equipping STI Learners with SAP Business One Skills",
@@ -85,16 +93,21 @@ fun LatestNewsCard() {
                 Spacer(modifier = Modifier.size(12.dp))
                 Text(
                     text = "Find out how STI turns students into job-ready individuals through SAP Business One Cloud System.",
-                    style = MaterialTheme.typography.overline
+                    style = MaterialTheme.typography.overline.copy(fontFamily = OpenSans)
                 )
             }
         }
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
-fun ClassScheduleCard() {
-    Card(elevation = 4.dp) {
+private fun ClassScheduleCard(navController: NavController) {
+    Card(elevation = 2.dp, onClick = {
+        navController.navigate(Screens.ClassSchedule.route) {
+            launchSingleTop = true
+        }
+    }) {
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.Center
@@ -109,10 +122,10 @@ fun ClassScheduleCard() {
                 style = MaterialTheme.typography.overline
             )
             Spacer(modifier = Modifier.size(6.dp))
-            CustomDivider()
+            OneStiDivider()
             Spacer(modifier = Modifier.size(14.dp))
             // If there's no class schedule, do this
-            if (getClassSchedule().isEmpty()) {
+            if (getCurrentClassSchedule().isEmpty()) {
                 Text(
                     text = "Your schedule is free today.",
                     style = MaterialTheme.typography.caption
@@ -120,7 +133,7 @@ fun ClassScheduleCard() {
             } else {
                 // Iterates the @Composable ClassScheduleItem
                 // depending on the list of schedules in the current day
-                getClassSchedule().forEachIndexed { index, classSchedule ->
+                getCurrentClassSchedule().forEachIndexed { index, classSchedule ->
                     ClassScheduleItem(
                         schedule = classSchedule,
                         color = courseSubjectColor[index]
@@ -141,7 +154,7 @@ private fun ClassScheduleItem(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .background(color)
-                .height(64.dp)
+                .height(58.dp)
                 .width(96.dp)
         ) {
             Column(
@@ -153,13 +166,11 @@ private fun ClassScheduleItem(
             ) {
                 Text(
                     text = schedule.classStart,
-                    style = MaterialTheme.typography.subtitle2,
-                    color = Color.White
+                    style = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.onPrimary),
                 )
                 Text(
                     text = "to ${schedule.classEnd}",
-                    style = MaterialTheme.typography.caption,
-                    color = Color.White
+                    style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onPrimary),
                 )
             }
         }
@@ -169,18 +180,23 @@ private fun ClassScheduleItem(
                 text = schedule.courseSubject,
                 style = MaterialTheme.typography.subtitle2
             )
-            Spacer(Modifier.size(4.dp))
+            Spacer(Modifier.height(2.dp))
             Text(
-                text = "${schedule.classRoom}|${schedule.classProfessor}",
-                style = MaterialTheme.typography.caption
+                text = "${schedule.classRoom} | ${schedule.classProfessor.uppercase()}",
+                style = MaterialTheme.typography.overline
             )
         }
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
-fun PaymentScheduleCard() {
-    Card(elevation = 4.dp) {
+private fun PaymentScheduleCard(navController: NavController) {
+    Card(elevation = 2.dp, onClick = {
+        navController.navigate(Screens.StudentBalance.route) {
+            launchSingleTop = true
+        }
+    }) {
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.Center
@@ -196,15 +212,21 @@ fun PaymentScheduleCard() {
                 )
                 Text(
                     text = "VIEW ALL",
-                    style = MaterialTheme.typography.overline,
-                    color = PrimaryColor
+                    style = MaterialTheme.typography.overline.copy(
+                        color = MaterialTheme.colors.primary,
+                        fontWeight = FontWeight.Medium
+                    )
                 )
             }
             Spacer(modifier = Modifier.size(4.dp))
-            Text(text = "AS OF ${getDate()}", style = MaterialTheme.typography.overline)
+            Text(
+                text = "AS OF ${getDate()}",
+                style = MaterialTheme.typography.overline
+            )
             Spacer(modifier = Modifier.size(6.dp))
-            CustomDivider()
+            OneStiDivider()
             Spacer(modifier = Modifier.size(12.dp))
+            val latestPaymentSchedule = StudentBalance.ThirdYearFirstTerm.paymentScheduleList[1]
             Row(Modifier.fillMaxWidth()) {
                 Column {
                     Text(
@@ -212,7 +234,7 @@ fun PaymentScheduleCard() {
                         style = MaterialTheme.typography.body1
                     )
                     Text(
-                        text = "PhP 1,364.80",
+                        text = "PhP ${String.format("%,.2f", latestPaymentSchedule.amountBalance)} ",
                         style = MaterialTheme.typography.subtitle1
                     )
                 }
@@ -223,7 +245,7 @@ fun PaymentScheduleCard() {
                         style = MaterialTheme.typography.body2
                     )
                     Text(
-                        text = "08 Oct, 2021",
+                        text = latestPaymentSchedule.scheduleDate,
                         style = MaterialTheme.typography.subtitle1
                     )
                 }
@@ -232,9 +254,14 @@ fun PaymentScheduleCard() {
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
-fun LatestGradeCard() {
-    Card(elevation = 4.dp) {
+fun LatestGradeCard(navController: NavController) {
+    Card(elevation = 2.dp, onClick = {
+        navController.navigate(Screens.Grades.route) {
+            launchSingleTop = true
+        }
+    }) {
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.Center
@@ -250,66 +277,60 @@ fun LatestGradeCard() {
                 )
                 Text(
                     text = "VIEW ALL",
-                    style = MaterialTheme.typography.overline,
-                    color = PrimaryColor
+                    style = MaterialTheme.typography.overline.copy(
+                        color = MaterialTheme.colors.primary,
+                        fontWeight = FontWeight.Medium
+                    ),
                 )
             }
             Spacer(modifier = Modifier.size(4.dp))
-            CustomDivider()
-            Spacer(modifier = Modifier.size(12.dp))
-            Text(
-                text = "JEFFERSON PRADO",
-                style = MaterialTheme.typography.caption
-            )
+            OneStiDivider()
+            Spacer(modifier = Modifier.size(8.dp))
+            val latestGrade = GradesPerTerm.ThirdYearFirstTerm.gradesList[7]
             Row(
                 Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Data Structures & Algorithms",
-                    style = MaterialTheme.typography.body2
-                )
-                Text(
-                    text = "100.00",
-                    style = MaterialTheme.typography.body2,
-                    color = PrimaryColor
-                )
+                Column {
+                    Text(
+                        text = latestGrade.instructorName.uppercase(),
+                        style = MaterialTheme.typography.overline,
+                    )
+                    Text(
+                        text = latestGrade.subjectName,
+                        style = MaterialTheme.typography.body1.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        modifier = Modifier.widthIn(max = 250.dp)
+                    )
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "PRELIM",
+                        style = MaterialTheme.typography.overline.copy(
+                            color = MaterialTheme.colors.primary,
+                            fontWeight = FontWeight.Medium
+                        ),
+                    )
+                    Text(
+                        text = String.format("%.2f", latestGrade.gradesEveryPeriodList.first()),
+                        style = MaterialTheme.typography.body1.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                    )
+                }
             }
         }
     }
 }
 
+@ExperimentalMaterialApi
+@Preview(showBackground = true, backgroundColor = 0xFFEDF1F4)
 @Composable
-fun CustomDivider() {
-    Divider(color = DividerColor, thickness = 1.5.dp)
+fun HomeScreenPreview() {
+    OneStiAppTheme {
+        HomeScreen(MainViewModel(), navController = rememberNavController())
+    }
 }
 
-//@Preview
-//@Composable
-//fun HomeScreenPreview() {
-//    OneStiAppTheme {
-//        Scaffold(
-//                topBar = {
-//                    HomeTopBar(title = getTitle(DrawerScreens.Home), onButtonClicked = { })
-//                },
-//        ) {
-//            Surface(modifier = Modifier.fillMaxSize()) {
-//                val scrollState = rememberScrollState()
-//                Column(
-//                        Modifier
-//                                .fillMaxSize()
-//                                .verticalScroll(scrollState)
-//                                .padding(10.dp)
-//                ) {
-//                    LatestNewsCard()
-//                    Spacer(Modifier.size(12.dp))
-//                    ClassScheduleCard()
-//                    Spacer(Modifier.size(12.dp))
-//                    PaymentScheduleCard()
-//                    Spacer(Modifier.size(12.dp))
-//                    LatestGradeCard()
-//                }
-//            }
-//        }
-//    }
-//}

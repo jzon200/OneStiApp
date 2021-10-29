@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">OneStiApp</string>
+    <string name="grades_info">All the grades indicated on this section are encoded only by the corresponding teacher or instructor of every subject.\n\nFor grade-related concerns, you may discuss it with your teacher.</string>
+    <string name="class_schedule_info">"Missing time, room number, or questionable subject periods?\n\nConfirm your class schedules through the Registrar's Office."</string>
+    <string name="program_curriculum_info">"For issues regarding the status of your subject list and units taken, proceed to the Registrar's Office to verify your information or you may report it using our in-app feedback page."</string>
+    <string name="student_balance_info">"To validate your balances, check with the Registrar's Office for clarification."</string>
 </resources>
