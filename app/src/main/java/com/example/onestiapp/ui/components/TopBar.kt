@@ -15,9 +15,7 @@ import androidx.navigation.NavController
 import com.example.onestiapp.R
 import com.example.onestiapp.Screens
 import com.example.onestiapp.ui.theme.Roboto
-import com.google.accompanist.pager.ExperimentalPagerApi
 
-@ExperimentalPagerApi
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable

@@ -1,5 +1,10 @@
 package com.example.onestiapp.data
 
+/**
+ * A class that holds the Data of Grades per Term
+ * @param gradesList List of [Grade] per term.
+ * @param cumulativeGWA The Cumulative GWA displayed per term.
+ */
 enum class GradesPerTerm(val gradesList: List<Grade>, val cumulativeGWA: Double? = null) {
     ThirdYearFirstTerm(
         gradesList = thirdYearFirstTermGrades,

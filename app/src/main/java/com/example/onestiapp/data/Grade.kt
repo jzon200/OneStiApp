@@ -2,6 +2,15 @@ package com.example.onestiapp.data
 
 import kotlin.math.roundToInt
 
+/**
+ * This class is classified as a data for Grades.
+ * @param subjectName The name of subject.
+ * @param instructorName The name of instructor/professor.
+ * @param gradesEveryPeriodList The grades every period (Prelim, Midterms, Pre final, Finals).
+ * @param uploadDate The Date of the Grade uploaded.
+ * @param units The units per subject set to 3.00 as Default.
+ * @param isNonCreditCourse This determines if the couse grade is credited in GWA (Most are P.E & NSTP).
+ */
 data class Grade(
     val subjectName: String,
     val instructorName: String,

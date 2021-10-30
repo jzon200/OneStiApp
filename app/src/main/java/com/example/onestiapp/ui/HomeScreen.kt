@@ -1,5 +1,6 @@
 package com.example.onestiapp.ui
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.onestiapp.R
@@ -39,7 +41,11 @@ fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
             .verticalScroll(rememberScrollState())
             .padding(10.dp)
     ) {
-        LatestNewsCard()
+        LatestNewsCard(
+            newsTitle = "STI Students to Represent PH in the Global Stage",
+            description = "Meet the STI students who will be competing at the Asia Pacific and Global levels of the Huawei ICT Competition 2021",
+            imageIdRes = R.drawable.new_huawei_thumb
+        )
         Spacer(Modifier.height(12.dp))
         ClassScheduleCard(navController)
         Spacer(Modifier.height(12.dp))
@@ -51,11 +57,10 @@ fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
 
 
 @Composable
-private fun LatestNewsCard() {
+private fun LatestNewsCard(newsTitle: String, description: String, @DrawableRes imageIdRes: Int) {
     Card(elevation = 2.dp) {
         Column(
             modifier = Modifier.padding(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Row(
@@ -79,20 +84,20 @@ private fun LatestNewsCard() {
             OneStiDivider()
             Spacer(modifier = Modifier.size(12.dp))
             Text(
-                text = "Equipping STI Learners with SAP Business One Skills",
+                text = newsTitle,
                 style = MaterialTheme.typography.subtitle2
             )
             Spacer(modifier = Modifier.size(12.dp))
             Row(Modifier.fillMaxWidth()) {
                 Image(
-                    painterResource(id = R.drawable.latest_news),
+                    painterResource(id = imageIdRes),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.fillMaxWidth(0.66f)
                 )
                 Spacer(modifier = Modifier.size(12.dp))
                 Text(
-                    text = "Find out how STI turns students into job-ready individuals through SAP Business One Cloud System.",
+                    text = description,
                     style = MaterialTheme.typography.overline.copy(fontFamily = OpenSans)
                 )
             }
@@ -283,10 +288,14 @@ fun LatestGradeCard(navController: NavController) {
                     ),
                 )
             }
+            Text(
+                text = "AS OF ${getDate()}",
+                style = MaterialTheme.typography.overline
+            )
             Spacer(modifier = Modifier.size(4.dp))
             OneStiDivider()
             Spacer(modifier = Modifier.size(8.dp))
-            val latestGrade = GradesPerTerm.ThirdYearFirstTerm.gradesList[7]
+            val latestGrade = GradesPerTerm.ThirdYearFirstTerm.gradesList[0]
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -300,7 +309,8 @@ fun LatestGradeCard(navController: NavController) {
                     Text(
                         text = latestGrade.subjectName,
                         style = MaterialTheme.typography.body1.copy(
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 18.sp
                         ),
                         modifier = Modifier.widthIn(max = 250.dp)
                     )
@@ -316,7 +326,8 @@ fun LatestGradeCard(navController: NavController) {
                     Text(
                         text = String.format("%.2f", latestGrade.gradesEveryPeriodList.first()),
                         style = MaterialTheme.typography.body1.copy(
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 18.sp
                         ),
                     )
                 }

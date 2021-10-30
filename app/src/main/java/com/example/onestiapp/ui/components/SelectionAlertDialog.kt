@@ -21,7 +21,7 @@ import com.example.onestiapp.ui.theme.Roboto
 
 /**
  * Set to Reusable Composable
- * Used in Information Tabs [GradesScreen], [ClassScheduleScreen], [StudentBalanceScreen]
+ * Used in Information Tabs (Grades, Class Schedule, StudentBalance)
  */
 @Composable
 fun OneStiSelectionButton(

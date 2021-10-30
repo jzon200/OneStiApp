@@ -1,5 +1,8 @@
 package com.example.onestiapp.data
 
+/**
+ * Class of Student Balance Data
+ */
 enum class StudentBalance(
     val paymentScheduleList: List<PaymentSchedule>,
     val grossAssessmentList: List<GrossAssessment> = listOf(

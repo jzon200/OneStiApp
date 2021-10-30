@@ -1,7 +1,11 @@
 package com.example.onestiapp.data
 
 /**
- * This class is a list of [CourseSubject] in Program Curriculum.
+ * This class holds the data of [CourseSubject] in Program Curriculum.
+ * @param title The title of Card (First Year, Second Year, ...)
+ * @param firstTermSubjects The list of [CourseSubject] in first term.
+ * @param secondTermSubjects The list of [CourseSubject] in second term.
+ * @param electiveCourses This is optionally used as third items for the list of [CourseSubject].
  */
 enum class ProgramCurriculum(
     val title: String,

@@ -37,22 +37,11 @@ val otherScreens = listOf(
 )
 
 /**
- * I moved the Navigation of Screens as a Sealed Class [Screens]
+ * This class is used for Navigation routes.
+ * @param route - The route of the screen navigation.
+ * @param title - The title of TopBar.
  */
 sealed class Screens(val route: String, val title: String) {
-    companion object {
-        fun fromRoute(route: String?): Screens =
-            when (route) {
-                null -> Home
-                Home.route -> Home
-                Grades.route -> Grades
-                ClassSchedule.route -> ClassSchedule
-                ProgramCurriculum.route -> ProgramCurriculum
-                StudentBalance.route -> StudentBalance
-                else -> throw IllegalArgumentException("Route $route is not recognized.")
-            }
-    }
-
     object Home : Screens("home", "Home")
     object Grades : Screens("grades", "My Grades")
     object ClassSchedule : Screens("classSchedule", "My Class Schedule")

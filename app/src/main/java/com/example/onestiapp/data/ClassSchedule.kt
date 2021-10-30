@@ -4,7 +4,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * Data class for Class Schedule
+ * This class is classified as a data for Class Schedules.
+ * @param courseSubject The name of subject.
+ * @param classStart The time of class will start.
+ * @param classEnd The time of class dismissal.
+ * @param classProfessor The name of instructor/professor.
+ * @param dayIndicator This indicates if the schedule is (Monday, Tuesday, Wednesday, ...).
+ * It is only displayed in the Entire Week, and set to null as default.
  */
 data class ClassSchedule(
     val courseSubject: String,

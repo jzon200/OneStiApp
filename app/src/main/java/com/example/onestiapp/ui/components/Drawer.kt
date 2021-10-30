@@ -14,7 +14,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.onestiapp.R
 import com.example.onestiapp.Screens
 import com.example.onestiapp.drawerScreens
@@ -172,14 +171,14 @@ fun OneStiDrawerProfile() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(18.dp))
         Image(
             painter = painterResource(id = R.drawable.profile_pic),
             contentDescription = "Profile Pic",
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .clip(CircleShape)
-                .size(72.dp)
+                .size(76.dp)
         )
         // Hard-coded yet
         Text(
@@ -188,23 +187,20 @@ fun OneStiDrawerProfile() {
                 color = MaterialTheme.colors.primary,
                 fontWeight = FontWeight.Medium
             ),
-            modifier = Modifier.padding(
-                top = 8.dp,
-                bottom = 4.dp
-            )
+            modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
         )
         Text(
             text = "EDZON JAEVE BUBAN BAUSA",
-            style = MaterialTheme.typography.subtitle1.copy(fontSize = 16.sp),
+            style = MaterialTheme.typography.subtitle2,
         )
         Text(
             text = "02000168406",
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.body2.copy(color = DrawerContentIconColor),
         )
         Spacer(modifier = Modifier.size(12.dp))
         Text(
             text = "BSIT • STI COLLEGE SAN JOSE DEL MONTE",
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.body2.copy(color = DrawerContentIconColor),
             modifier = Modifier.padding(bottom = 12.dp)
         )
         OneStiDivider()
@@ -226,7 +222,7 @@ fun DrawerProfilePreview() {
 fun DrawerPreview() {
     OneStiAppTheme {
         Surface {
-            OneStiNavDrawer {  }
+            OneStiNavDrawer { }
         }
     }
 }
